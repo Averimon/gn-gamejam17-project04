@@ -6,12 +6,15 @@ public class Customer : MonoBehaviour
     {
         Waiting,
         Walking,
+        Satisfied,
     }
     
     [SerializeField] private float speed = 5f;
     [SerializeField] private CustomerState state = CustomerState.Waiting;
     [SerializeField] private Vector3 desiredPosition;
     [SerializeField] private Vector3 direction;
+    
+    [SerializeField] private Item craving;
     
     // -------------------------------------------- Event Functions --------------------------------------------
     private void Start()
@@ -43,9 +46,13 @@ public class Customer : MonoBehaviour
         state = CustomerState.Walking;
     }
 
-    public void ReciveItem()
+    public void ReciveItem(Item recived)
     {
         print("todo");
+        if (recived.type == craving.type)
+        {
+            state = CustomerState.Satisfied;
+        }
     }
 
     // -------------------------------------------- Helper Functions --------------------------------------------

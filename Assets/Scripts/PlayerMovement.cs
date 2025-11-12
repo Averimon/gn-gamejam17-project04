@@ -26,7 +26,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("PlayerMovement received a click event.");
             StartCoroutine(MovePlayer(locationToMove));
-        } else
+        }
+        else
         {
             Debug.Log("Player is already moving. Click ignored.");
         }

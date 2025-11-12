@@ -1,8 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement Instance { get; private set; }
+
+    private bool isMoving = false;
 
     private void Awake()
     {
@@ -19,9 +22,31 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnClick(Vector2 locationToMove)
     {
-        Debug.Log("PlayerMovement received a click event.");
-        // Player smoothly walks to location
-        // Implement movement logic here
-        
+        if (!isMoving)
+        {
+            Debug.Log("PlayerMovement received a click event.");
+            StartCoroutine(MovePlayer(locationToMove));
+        } else
+        {
+            Debug.Log("Player is already moving. Click ignored.");
+        }
+    }
+
+    private IEnumerator MovePlayer(Vector2 targetPosition)
+    {
+        isMoving = true;
+        float duration = 1.0f;
+        float elapsed = 0.0f;
+        Vector2 startingPosition = transform.position;
+
+        while (elapsed < duration)
+        {
+            transform.position = Vector2.Lerp(startingPosition, targetPosition, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPosition;
+        isMoving = false;
     }
 }

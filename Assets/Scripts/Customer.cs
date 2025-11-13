@@ -13,17 +13,23 @@ public class Customer : MonoBehaviour
     [SerializeField] private CustomerState state = CustomerState.Waiting;
     [SerializeField] private Vector3 desiredPosition;
     [SerializeField] private Vector3 direction;
-    
     [SerializeField] private Item craving;
+
+    private Table _table;
     
     // -------------------------------------------- Event Functions --------------------------------------------
     private void Start()
     {
-        // for testing:
-        desiredPosition.x = Random.Range(-9f, 9f);
-        desiredPosition.y = Random.Range(-5f, 5f);
+        _table = TableHandler.Instance.GetFreeTable();
+        if (!_table)
+        {
+            state = CustomerState.Waiting;
+            return;
+        }
+        
+        desiredPosition = _table.GetSeat();
+        direction = (desiredPosition - transform.position).normalized;
         state = CustomerState.Walking;
-        // -----------
     }
 
     private void Update()
@@ -58,7 +64,6 @@ public class Customer : MonoBehaviour
     // -------------------------------------------- Helper Functions --------------------------------------------
     private void Move()
     {
-        direction = (desiredPosition - transform.position).normalized;   
         transform.position += direction * (speed * Time.deltaTime);
         
         if (Vector3.Distance(transform.position, desiredPosition) < 0.1f)

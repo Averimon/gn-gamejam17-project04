@@ -16,6 +16,7 @@ public class CustomerSpawner : MonoBehaviour
         if (customerPrefab == null)
         {
             Debug.LogError("CustomerPrefab is null, add to this script where it is used in the scene!");
+            return;
         }
     }
 

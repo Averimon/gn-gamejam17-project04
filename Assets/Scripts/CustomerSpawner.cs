@@ -1,0 +1,63 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CustomerSpawner : MonoBehaviour
+{
+    public static CustomerSpawner Instance { get; private set; }
+    
+    [SerializeField] private GameObject customerPrefab;
+    [SerializeField] private List<GameObject> customers;
+    [SerializeField] private Vector3 spawnPosition = Vector3.zero;
+    [SerializeField] private bool spawnEnabled = true;
+    [SerializeField] private float spawnTime = 1f;
+    [SerializeField] private float timePassed = 0f;
+    
+    // -------------------------------------------- Event Functions --------------------------------------------
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    
+    void Start()
+    {
+        if (customerPrefab == null)
+        {
+            Debug.LogError("CustomerPrefab is null, add to this script where it is used in the scene!");
+            return;
+        }
+    }
+
+    void Update()
+    {
+        if (spawnEnabled && timePassed > spawnTime)
+        {
+            SpawnCustomer();
+            timePassed = 0f;
+        }
+        else
+        {
+            timePassed += Time.deltaTime;
+        }
+    }
+    
+    // -------------------------------------------- Public Functions --------------------------------------------
+    public void ToggleSpawner()
+    {
+        spawnEnabled = !spawnEnabled;
+    }
+    
+    // -------------------------------------------- Helper Functions --------------------------------------------
+    private void SpawnCustomer()
+    {
+        GameObject customer = Instantiate(customerPrefab, spawnPosition, Quaternion.identity);
+        customers.Add(customer);
+    }
+}

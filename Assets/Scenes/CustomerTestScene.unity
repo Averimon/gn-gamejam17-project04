@@ -343,8 +343,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0490d971a6264c878a45f60fbc79aff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Table
-  seat1: {fileID: 280600299}
-  seat2: {fileID: 1586932196}
+  chair1: {fileID: 280600299}
+  chair2: {fileID: 1586932196}
 --- !u!1 &773267717
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,8 +484,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0490d971a6264c878a45f60fbc79aff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Table
-  seat1: {fileID: 821815091}
-  seat2: {fileID: 1000563875}
+  chair1: {fileID: 821815091}
+  chair2: {fileID: 1000563875}
 --- !u!1 &1000563875 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4736734998054629935, guid: eb542539a6f7fda4986f63e2fb710f2c, type: 3}
@@ -612,9 +612,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CustomerSpawner
   customerPrefab: {fileID: 7790308365399024018, guid: 235b4e7df4870412798af1bcb5e48d17, type: 3}
   customers: []
-  spawnPosition: {x: -9, y: -3}
-  spawnEnabled: 0
-  spawnTime: 1
+  spawnPosition: {x: -9, y: -3, z: -1}
+  spawnEnabled: 1
+  spawnTime: 2
   timePassed: 0
 --- !u!4 &1178620634
 Transform:
@@ -723,8 +723,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0490d971a6264c878a45f60fbc79aff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Table
-  seat1: {fileID: 2138273424}
-  seat2: {fileID: 1748724977}
+  chair1: {fileID: 2138273424}
+  chair2: {fileID: 1748724977}
 --- !u!1 &2138273424 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5905157303750462411, guid: 04306a5b5a15ce140a2db800899a928b, type: 3}
@@ -735,6 +735,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 362431746}
-  - {fileID: 1146871593}
   - {fileID: 1178620634}
   - {fileID: 773267718}
+  - {fileID: 1146871593}

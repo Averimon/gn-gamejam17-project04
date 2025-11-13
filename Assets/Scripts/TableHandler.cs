@@ -7,6 +7,7 @@ public class TableHandler : MonoBehaviour
     
     [SerializeField] private List<Table> tables = new List<Table>();
     [SerializeField] private Queue<Table> _freeTables = new Queue<Table>();
+    [SerializeField] private Queue<Customer> _waitingCustomers = new Queue<Customer>();
     [SerializeField] private Vector3 waitingPosition;
     
     // -------------------------------------------- Event Functions --------------------------------------------
@@ -41,13 +42,26 @@ public class TableHandler : MonoBehaviour
 
     
     // -------------------------------------------- Public Functions --------------------------------------------
-    public Table GetFreeTable()
+    public Table GetFreeTable(Customer customer)
     {
-        return _freeTables.Count > 0 ? _freeTables.Dequeue() : null;
+        if (_freeTables.Count > 0) return _freeTables.Dequeue();
+   
+        print("one more customer waiting on a table");
+        _waitingCustomers.Enqueue(customer);
+        return null;
     }
 
-    public void AddTable(Table table)
+    public void FreeTable(Table table)
     {
-        _freeTables.Enqueue(table);
+        print("Table freed!");
+        if (_waitingCustomers.Count > 0)
+        {
+            Customer customer = _waitingCustomers.Dequeue();
+            customer.AcquireTable(table);
+        }
+        else
+        {
+            _freeTables.Enqueue(table);
+        }
     }
 }

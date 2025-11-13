@@ -3,14 +3,29 @@ using UnityEngine;
 
 public class CustomerSpawner : MonoBehaviour
 {
+    public static CustomerSpawner Instance { get; private set; }
+    
     [SerializeField] private GameObject customerPrefab;
     [SerializeField] private List<GameObject> customers;
-    [SerializeField] private Vector2 spawnPosition = Vector2.zero;
+    [SerializeField] private Vector3 spawnPosition = Vector3.zero;
     [SerializeField] private bool spawnEnabled = true;
     [SerializeField] private float spawnTime = 1f;
     [SerializeField] private float timePassed = 0f;
     
     // -------------------------------------------- Event Functions --------------------------------------------
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    
     void Start()
     {
         if (customerPrefab == null)

@@ -1,74 +1,105 @@
+using System;
 using UnityEngine;
 
 public class Customer : MonoBehaviour
 {
-    private enum CustomerState
+    private enum CustomerStates
     {
         Waiting,
         Walking,
-        Satisfied,
     }
     
     [SerializeField] private float speed = 5f;
-    [SerializeField] private CustomerState state = CustomerState.Waiting;
+    [SerializeField] private CustomerStates states = CustomerStates.Waiting;
+    [SerializeField] private Vector3 spawnPosition;
     [SerializeField] private Vector3 desiredPosition;
     [SerializeField] private Vector3 direction;
     [SerializeField] private Item craving;
+    [SerializeField] private float maxWaitTime = 1f;
 
     private Table _table;
-    
+    private float _timeWaited = 0f;
+    private bool _happy = false;
+    private bool _served = false;
+
     // -------------------------------------------- Event Functions --------------------------------------------
     private void Start()
     {
-        _table = TableHandler.Instance.GetFreeTable();
-        if (!_table)
-        {
-            state = CustomerState.Waiting;
-            return;
-        }
-        
-        desiredPosition = _table.GetSeat();
-        direction = (desiredPosition - transform.position).normalized;
-        state = CustomerState.Walking;
+        spawnPosition = transform.position;
+        AcquireTable(TableHandler.Instance.GetFreeTable(this));
     }
 
     private void Update()
     {
-        switch (state)
+        switch (states)
         {
-            case CustomerState.Waiting:
-                print("todo");
+            case CustomerStates.Waiting:
+                Wait();
                 break;
-            case CustomerState.Walking:
+            case CustomerStates.Walking:
                 Move();
                 break;
         }
     }
-    
+
     // -------------------------------------------- Public Functions --------------------------------------------
-    public void StartMoving()
+    public void ReceiveItem(Item received)
     {
-        direction = (transform.position - desiredPosition).normalized;
-        state = CustomerState.Walking;
+        _served = true;
+        _happy = received.type == craving.type;
+        
+        print("todo: Wait a few seconds?");
+        
+        TableHandler.Instance.FreeTable(_table);
+        desiredPosition = spawnPosition;
+        direction = (desiredPosition - transform.position).normalized;
+        ChangeState(CustomerStates.Walking);
     }
 
-    public void ReciveItem(Item recived)
+    public void OrderItem()
     {
-        print("todo");
-        if (recived.type == craving.type)
-        {
-            state = CustomerState.Satisfied;
-        }
+        print("todo: how to order items?");
+        _timeWaited = 0f;
     }
 
     // -------------------------------------------- Helper Functions --------------------------------------------
     private void Move()
     {
         transform.position += direction * (speed * Time.deltaTime);
-        
-        if (Vector3.Distance(transform.position, desiredPosition) < 0.1f)
+        if (Vector3.Distance(transform.position, desiredPosition) < 0.1f) ChangeState(CustomerStates.Waiting);
+        if (_served && Vector3.Distance(transform.position, spawnPosition) < 0.1f) ;
+    }
+
+    private void Wait()
+    {
+        _timeWaited += Time.deltaTime;
+        if (_timeWaited > maxWaitTime)
         {
-            state = CustomerState.Waiting;
+            TableHandler.Instance.FreeTable(_table);
+            
+            desiredPosition = spawnPosition;
+            direction = (desiredPosition - transform.position).normalized;
+            ChangeState(CustomerStates.Walking);
         }
+    }
+
+    public void AcquireTable(Table table)
+    {
+        _table = table;
+        if (_table == null)
+        {
+            ChangeState(CustomerStates.Waiting);;
+            return;
+        }
+        
+        desiredPosition = _table.GetSeat();
+        direction = (desiredPosition - transform.position).normalized;
+        ChangeState(CustomerStates.Walking);
+    }
+
+    private void ChangeState(CustomerStates newState)
+    {
+        states = newState;
+        if (newState != CustomerStates.Waiting) _timeWaited = 0f;
     }
 }

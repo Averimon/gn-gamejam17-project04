@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement Instance { get; private set; }
+    public Vector3 target;
+    public UnityEngine.AI.NavMeshAgent agent;
 
     private bool isMoving = false;
 
@@ -11,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Instance == null)
         {
+            agent.updateRotation = false;
+            agent.updateUpAxis = false;
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -18,6 +22,12 @@ public class PlayerMovement : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Update()
+    {
+        if (target != null)
+            agent.SetDestination(target);
     }
 
     public void OnClick(Vector2 locationToMove)

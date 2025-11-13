@@ -34,6 +34,6 @@ public class Clickable : MonoBehaviour, IPointerClickHandler
                 break;
         }
 
-        PlayerMovement.Instance.OnClick(targetPosition);
+        PlayerMovement.Instance.target = targetPosition;
     }
 }

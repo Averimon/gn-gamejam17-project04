@@ -84,7 +84,7 @@ public class Customer : MonoBehaviour
     }
     private void OrderingItem()
     {
-        print("todo: wait a few seconds and that the player need to click on it add a random gen to get a random order");
+        print("todo: wait a few seconds, the player need to click on it add a random gen to get a random order");
         
         if(PlayerMovement.Instance.target == transform.position && PlayerMovement.Instance.agent.remainingDistance < 0.1f)
         {

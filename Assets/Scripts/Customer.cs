@@ -7,6 +7,9 @@ public class Customer : MonoBehaviour
     {
         Waiting,
         Walking,
+        Ordering,
+        Ordered,
+        Eating,
     }
     
     [SerializeField] private float speed = 5f;
@@ -39,6 +42,15 @@ public class Customer : MonoBehaviour
             case CustomerStates.Walking:
                 Move();
                 break;
+            case CustomerStates.Ordering:
+                OrderingItem();
+                break;
+            case CustomerStates.Ordered:
+                OrderItem();
+                break;
+            case CustomerStates.Eating:
+                Eating();
+                break;
         }
     }
 
@@ -47,22 +59,52 @@ public class Customer : MonoBehaviour
     {
         _served = true;
         _happy = received.type == craving.type;
-        
+
+        ChangeState(CustomerStates.Eating);
         print("todo: Wait a few seconds?");
-        
+
         TableHandler.Instance.FreeTable(_table);
         desiredPosition = spawnPosition;
         direction = (desiredPosition - transform.position).normalized;
         ChangeState(CustomerStates.Walking);
     }
 
-    public void OrderItem()
+    // -------------------------------------------- Helper Functions --------------------------------------------
+    private void OrderItem()
     {
-        print("todo: how to order items?");
+        print("todo: Add a timer to simulate ordering time");
+        if (PlayerMovement.Instance.target == transform.position && PlayerMovement.Instance.agent.remainingDistance < 0.1f)
+        {
+            print("todo: verify if order that player brought is correct");
+            Transform Order = transform.GetChild(0);
+            Order.gameObject.SetActive(false);
+            ReceiveItem(PlayerMovement.Instance.itemInHand);
+        }
         _timeWaited = 0f;
     }
-
-    // -------------------------------------------- Helper Functions --------------------------------------------
+    private void OrderingItem()
+    {
+        print("todo: wait a few seconds and that the player need to click on it add a random gen to get a random order");
+        
+        if(PlayerMovement.Instance.target == transform.position && PlayerMovement.Instance.agent.remainingDistance < 0.1f)
+        {
+            ChangeState(CustomerStates.Ordered);
+            Transform Order = transform.GetChild(0);
+            Order.gameObject.SetActive(true);
+        }
+    }
+    private void Eating()
+    {
+        _timeWaited += Time.deltaTime;
+        if (_timeWaited > 2f)
+        {
+            TableHandler.Instance.FreeTable(_table);
+            
+            desiredPosition = spawnPosition;
+            direction = (desiredPosition - transform.position).normalized;
+            ChangeState(CustomerStates.Walking);
+        }
+    }
     private void Move()
     {
         transform.position += direction * (speed * Time.deltaTime);

@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement Instance { get; private set; }
+    public Item itemInHand;
     public Vector3 target;
     public UnityEngine.AI.NavMeshAgent agent;
 

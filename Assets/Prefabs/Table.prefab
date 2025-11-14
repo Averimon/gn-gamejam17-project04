@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1528b1681cf357f4da60ea586b6fb8ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clickable
+  itemPlaceOffset: {x: 0.02, y: 0.2}
   playerDestination: 0
 --- !u!70 &133933413614958865
 CapsuleCollider2D:

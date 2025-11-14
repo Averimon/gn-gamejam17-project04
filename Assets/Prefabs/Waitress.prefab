@@ -180,6 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98d84f4b117a80a41ab943c4dac44fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaitressInteraction
+  itemHoldOffset: {x: 0.05, y: 1}
 --- !u!114 &3270603145880994957
 MonoBehaviour:
   m_ObjectHideFlags: 0

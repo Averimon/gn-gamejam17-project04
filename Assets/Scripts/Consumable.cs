@@ -33,7 +33,7 @@ public class Consumable : MonoBehaviour, IPointerClickHandler
 
         if (this != null && gameObject.activeInHierarchy)
         {
-            WaitressInteraction.Instance.PickUp(this);
+            WaitressInteraction.Instance.PickUpItem(this);
         }
 
         isWaiting = false;

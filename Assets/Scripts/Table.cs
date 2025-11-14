@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Table : MonoBehaviour
 {
     [SerializeField] private GameObject chair1;
     [SerializeField] private GameObject chair2;
+    
+    private List<Customer> _customers = new List<Customer>();
     
     void Start()
     {
@@ -19,9 +22,19 @@ public class Table : MonoBehaviour
         }
     }
 
-    public Vector3 GetSeat()
+    public Vector3 GetSeat(Customer customer)
     {
-        if (Random.value > 0.5) return chair1.transform.position;
+        _customers.Add(customer);
+        
+        if (Random.value >= 0.5) return chair1.transform.position;
         else return chair2.transform.position;
+    }
+
+    public void GetTableOrders()
+    {
+        foreach (Customer customer in _customers)
+        {
+            customer.GiveOrder();
+        }
     }
 }

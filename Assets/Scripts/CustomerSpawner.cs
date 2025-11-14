@@ -7,6 +7,7 @@ public class CustomerSpawner : MonoBehaviour
     
     [SerializeField] private GameObject customerPrefab;
     [SerializeField] private List<GameObject> customers;
+    [SerializeField] private List<Sprite> skins = new List<Sprite>();
     [SerializeField] private Vector3 spawnPosition = Vector3.zero;
     [SerializeField] private bool spawnEnabled = true;
     [SerializeField] private float spawnTime = 1f;
@@ -33,6 +34,7 @@ public class CustomerSpawner : MonoBehaviour
             Debug.LogError("CustomerPrefab is null, add to this script where it is used in the scene!");
             return;
         }
+        if (skins.Count <= 0) Debug.LogError("Customer skins must have at least one skin");
     }
 
     void Update()
@@ -58,6 +60,7 @@ public class CustomerSpawner : MonoBehaviour
     private void SpawnCustomer()
     {
         GameObject customer = Instantiate(customerPrefab, spawnPosition, Quaternion.identity);
+        customer.GetComponent<Customer>().SetTexture(skins[Random.Range(0, skins.Count)]);
         customers.Add(customer);
     }
 }

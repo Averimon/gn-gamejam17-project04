@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2485534835944631149}
   - component: {fileID: 3270603145880994957}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Waitress
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -178,3 +178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cae4bbec0520db40b35e051bfa10bac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  itemInHand: {fileID: 0}
+  target: {x: 0, y: 0, z: 0}
+  agent: {fileID: 0}

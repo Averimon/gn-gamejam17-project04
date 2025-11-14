@@ -829,7 +829,7 @@ Transform:
   m_GameObject: {fileID: 1218838718}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.393, y: 4, z: 0}
+  m_LocalPosition: {x: 6.393, y: 1.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -854,7 +854,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8011618011739049610, guid: b652a543e73fa0a43b5b94ffdeb05a02, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: Waitress
       objectReference: {fileID: 0}
     - target: {fileID: 8728098913603766319, guid: b652a543e73fa0a43b5b94ffdeb05a02, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1511,6 +1511,79 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d32cd7df4b38b440ac3f99145c7b57a, type: 3}
+--- !u!1001 &3401506902889695650
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 220332658330162232, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1774486864967301707, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_Color.b
+      value: 0.29572788
+      objectReference: {fileID: 0}
+    - target: {fileID: 1774486864967301707, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8037735
+      objectReference: {fileID: 0}
+    - target: {fileID: 1774486864967301707, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8037735
+      objectReference: {fileID: 0}
+    - target: {fileID: 1774486864967301707, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7506339621384870525, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
+      propertyPath: m_Name
+      value: Barista
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1518,6 +1591,7 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 1440532531}
+  - {fileID: 3401506902889695650}
   - {fileID: 1714348681}
   - {fileID: 118460966}
   - {fileID: 1930594373}

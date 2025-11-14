@@ -73,12 +73,12 @@ public class Customer : MonoBehaviour
     private void OrderItem()
     {
         print("todo: Add a timer to simulate ordering time");
-        if (PlayerMovement.Instance.target == transform.position && PlayerMovement.Instance.agent.remainingDistance < 0.1f)
+        if (WaitressMovement.Instance.target == transform.position && WaitressMovement.Instance.agent.remainingDistance < 0.1f)
         {
             print("todo: verify if order that player brought is correct");
             Transform Order = transform.GetChild(0);
             Order.gameObject.SetActive(false);
-            ReceiveItem(PlayerMovement.Instance.itemInHand);
+            ReceiveItem(WaitressMovement.Instance.itemInHand);
         }
         _timeWaited = 0f;
     }
@@ -86,7 +86,7 @@ public class Customer : MonoBehaviour
     {
         print("todo: wait a few seconds, the player need to click on it add a random gen to get a random order");
         
-        if(PlayerMovement.Instance.target == transform.position && PlayerMovement.Instance.agent.remainingDistance < 0.1f)
+        if(WaitressMovement.Instance.target == transform.position && WaitressMovement.Instance.agent.remainingDistance < 0.1f)
         {
             ChangeState(CustomerStates.Ordered);
             Transform Order = transform.GetChild(0);

@@ -34,6 +34,6 @@ public class Clickable : MonoBehaviour, IPointerClickHandler
                 break;
         }
 
-        PlayerMovement.Instance.target = targetPosition;
+        WaitressMovement.Instance.target = targetPosition;
     }
 }

@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class WaitressMovement : MonoBehaviour
 {
-    public static PlayerMovement Instance { get; private set; }
+    public static WaitressMovement Instance { get; private set; }
     public Item itemInHand;
     public Vector3 target;
     public UnityEngine.AI.NavMeshAgent agent;

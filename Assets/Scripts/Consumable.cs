@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-[CreateAssetMenu(fileName = "Consumable", menuName = "Scriptable Objects/Consumable")]
-public class Consumable : ScriptableObject
+public class Consumable : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private string consumableName;
-    [SerializeField] private Sprite icon;
     [SerializeField] private ConsumableDifficulty difficulty;
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        WaitressInteraction.Instance.PickUp(this);
+    }
 }

@@ -4,9 +4,10 @@ using UnityEngine;
 public class TableHandler : MonoBehaviour
 {
     public static TableHandler Instance { get; private set; }
-    
-    [SerializeField] private List<Table> tables = new List<Table>();
-    [SerializeField] private Queue<Table> _freeTables = new Queue<Table>();
+
+    [SerializeField] private GameObject environment;
+    [SerializeField] private TableUnit[] tables;
+    [SerializeField] private Queue<TableUnit> _freeTables = new Queue<TableUnit>();
     [SerializeField] private Queue<Customer> _waitingCustomers = new Queue<Customer>();
     [SerializeField] private Vector3 waitingPosition;
     
@@ -26,23 +27,18 @@ public class TableHandler : MonoBehaviour
     
     void Start()
     {
-        if (tables.Count == 0)
+        if (environment == null)
         {
-            Debug.LogError("There are no tables! Add them to the TableHandler!");
-            return;
+            Debug.LogWarning("Please add an environment (with has Tables as children)!");
         }
 
-        if (waitingPosition == Vector3.zero)
-        {
-            Debug.LogWarning("Waiting position is set to zero!");
-        }
-        
-        foreach (Table table in tables) _freeTables.Enqueue(table);
+        tables = environment.GetComponentsInChildren<TableUnit>();
+        foreach (TableUnit table in tables) _freeTables.Enqueue(table);
     }
 
     
     // -------------------------------------------- Public Functions --------------------------------------------
-    public Table GetFreeTable(Customer customer)
+    public TableUnit GetFreeTable(Customer customer)
     {
         if (_freeTables.Count > 0) return _freeTables.Dequeue();
    
@@ -51,7 +47,7 @@ public class TableHandler : MonoBehaviour
         return null;
     }
 
-    public void FreeTable(Table table)
+    public void FreeTable(TableUnit table)
     {
         print("Table freed!");
         if (_waitingCustomers.Count > 0)

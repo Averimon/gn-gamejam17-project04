@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7241702738587791548}
+  - component: {fileID: 3366593543702137685}
   m_Layer: 0
   m_Name: Table Vertical
   m_TagString: Untagged
@@ -34,6 +35,20 @@ Transform:
   - {fileID: 6157264151195674562}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3366593543702137685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2621078988666785622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0490d971a6264c878a45f60fbc79aff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Table
+  chair1: {fileID: 5905157303750462411}
+  chair2: {fileID: 4736734998054629935}
 --- !u!1001 &850665164189500357
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -157,6 +172,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32a8ebca808c6f441b52ecd1e454856e, type: 3}
+--- !u!1 &4736734998054629935 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 314138692547604732, guid: 32a8ebca808c6f441b52ecd1e454856e, type: 3}
+  m_PrefabInstance: {fileID: 5035103666646123219}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6157264151195674562 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1194218082939594001, guid: 32a8ebca808c6f441b52ecd1e454856e, type: 3}
@@ -222,5 +242,10 @@ PrefabInstance:
 --- !u!4 &4989400401719500326 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1194218082939594001, guid: 32a8ebca808c6f441b52ecd1e454856e, type: 3}
+  m_PrefabInstance: {fileID: 6174257234853821239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5905157303750462411 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 314138692547604732, guid: 32a8ebca808c6f441b52ecd1e454856e, type: 3}
   m_PrefabInstance: {fileID: 6174257234853821239}
   m_PrefabAsset: {fileID: 0}

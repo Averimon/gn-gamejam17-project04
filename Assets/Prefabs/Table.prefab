@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 7241702738587791548}
   - component: {fileID: 2157247765045197438}
   - component: {fileID: 2160081029080784518}
-  - component: {fileID: 5015912535896152492}
+  - component: {fileID: 133933413614958865}
+  - component: {fileID: 6593450793868737611}
   m_Layer: 0
   m_Name: Table
   m_TagString: Untagged
@@ -81,13 +82,13 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7c95ad7300cef7347956497b3cfd0e19, type: 3}
-  m_Color: {r: 0.5568628, g: 0.36862746, b: 0.29411766, a: 1}
+  m_SortingOrder: -10
+  m_Sprite: {fileID: 21300000, guid: 051500aacc1b3064fb3ef83b0f78d98d, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5.12, y: 5.14}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -105,9 +106,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1528b1681cf357f4da60ea586b6fb8ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clickable
+  itemPlaceOffset: {x: 0.02, y: 0.2}
   playerDestination: 0
---- !u!61 &5015912535896152492
-BoxCollider2D:
+--- !u!70 &133933413614958865
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -140,18 +142,25 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Offset: {x: 0.0111879, y: 0.14293493}
+  m_Size: {x: 0.899636, y: 0.61125624}
+  m_Direction: 1
+--- !u!114 &6593450793868737611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2621078988666785622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &3563007703896028259
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1726553220181519947
 Transform:
   m_ObjectHideFlags: 0

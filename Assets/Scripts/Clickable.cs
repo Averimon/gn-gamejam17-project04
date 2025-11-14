@@ -21,19 +21,19 @@ public class Clickable : MonoBehaviour, IPointerClickHandler
         switch (playerDestination)
         {
             case WaitressDestination.Top:
-                targetPosition += new Vector3(0, 1.5f, 0);
+                targetPosition += new Vector3(0, 1f, 0);
                 break;
             case WaitressDestination.Bottom:
-                targetPosition += new Vector3(0, -1.5f, 0);
+                targetPosition += new Vector3(0, -1f, 0);
                 break;
             case WaitressDestination.Left:
-                targetPosition += new Vector3(-1.5f, 0, 0);
+                targetPosition += new Vector3(-1f, 0, 0);
                 break;
             case WaitressDestination.Right:
-                targetPosition += new Vector3(1.5f, 0, 0);
+                targetPosition += new Vector3(1f, 0, 0);
                 break;
         }
 
-        WaitressMovement.Instance.target = targetPosition;
+        WaitressMovement.Instance.MoveTo(targetPosition);
     }
 }

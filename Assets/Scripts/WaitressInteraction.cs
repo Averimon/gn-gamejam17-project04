@@ -19,6 +19,7 @@ public class WaitressInteraction : MonoBehaviour
 
     public void PickUp(Consumable consumable)
     {
+        Debug.Log($"Picked up consumable: {consumable}");
         WaitressMovement.Instance.itemInHand = consumable;
     }
 }

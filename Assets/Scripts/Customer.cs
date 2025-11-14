@@ -20,7 +20,7 @@ public class Customer : MonoBehaviour
     
     [Header("Debug")]
     [SerializeField] private CustomerStates states = CustomerStates.Waiting;
-    [SerializeField] private Item craving;
+    [SerializeField] private Consumable craving;
     [SerializeField] private Vector3 desiredPosition;
     [SerializeField] private Vector3 direction;
 
@@ -59,7 +59,7 @@ public class Customer : MonoBehaviour
     }
 
     // -------------------------------------------- Public Functions --------------------------------------------
-    public void ReceiveItem(Item received)
+    public void ReceiveItem(Consumable received)
     {
         _served = true;
         _happy = received.type == craving.type;
@@ -105,7 +105,8 @@ public class Customer : MonoBehaviour
     private void OrderItem()
     {
         print("todo: Add a timer to simulate ordering time");
-        if (WaitressMovement.Instance.target == transform.position && WaitressMovement.Instance.agent.remainingDistance < 0.1f)
+        if (Vector3.Distance(WaitressMovement.Instance.transform.position, transform.position) < 0.1f &&
+            WaitressMovement.Instance.agent.remainingDistance < 0.1f)
         {
             print("todo: verify if order that player brought is correct");
             Transform Order = transform.GetChild(0);
@@ -114,17 +115,20 @@ public class Customer : MonoBehaviour
         }
         _timeWaited = 0f;
     }
+
     private void OrderingItem()
     {
         print("todo: wait a few seconds, the player need to click on it add a random gen to get a random order");
         
-        if(WaitressMovement.Instance.target == transform.position && WaitressMovement.Instance.agent.remainingDistance < 0.1f)
+        if (Vector3.Distance(WaitressMovement.Instance.transform.position, transform.position) < 0.1f &&
+            WaitressMovement.Instance.agent.remainingDistance < 0.1f)
         {
             ChangeState(CustomerStates.Ordered);
             Transform Order = transform.GetChild(0);
             Order.gameObject.SetActive(true);
         }
     }
+
     private void Eating()
     {
         _timeWaited += Time.deltaTime;

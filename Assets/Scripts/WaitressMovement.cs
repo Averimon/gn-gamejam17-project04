@@ -1,23 +1,30 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.AI;
 
 public class WaitressMovement : MonoBehaviour
 {
     public static WaitressMovement Instance { get; private set; }
-    public Item itemInHand;
-    public Vector3 target;
-    public UnityEngine.AI.NavMeshAgent agent;
 
-    private bool isMoving = false;
+    public UnityEvent destinationReached;
+    public Consumable itemInHand;
+    public NavMeshAgent agent;
+
+    private bool hasDestination = false;
+    [SerializeField] private float arrivalThreshold = 0.05f;
 
     private void Awake()
     {
         if (Instance == null)
         {
-            agent.updateRotation = false;
-            agent.updateUpAxis = false;
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            agent.updateRotation = false;
+            agent.updateUpAxis = false;
+
+            if (destinationReached == null)
+                destinationReached = new UnityEvent();
         }
         else
         {
@@ -27,38 +34,21 @@ public class WaitressMovement : MonoBehaviour
 
     private void Update()
     {
-        if (target != null)
-            agent.SetDestination(target);
-    }
+        if (!hasDestination) return;
+        if (agent.pathPending) return;
 
-    public void OnClick(Vector2 locationToMove)
-    {
-        if (!isMoving)
+        if (agent.remainingDistance <= arrivalThreshold)
         {
-            Debug.Log("PlayerMovement received a click event.");
-            StartCoroutine(MovePlayer(locationToMove));
-        }
-        else
-        {
-            Debug.Log("Player is already moving. Click ignored.");
+            hasDestination = false;
+            agent.isStopped = true;
+            destinationReached?.Invoke();
         }
     }
 
-    private IEnumerator MovePlayer(Vector2 targetPosition)
+    public void MoveTo(Vector3 locationToMove)
     {
-        isMoving = true;
-        float duration = 1.0f;
-        float elapsed = 0.0f;
-        Vector2 startingPosition = transform.position;
-
-        while (elapsed < duration)
-        {
-            transform.position = Vector2.Lerp(startingPosition, targetPosition, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.position = targetPosition;
-        isMoving = false;
+        agent.isStopped = false;
+        agent.SetDestination(locationToMove);
+        hasDestination = true;
     }
 }

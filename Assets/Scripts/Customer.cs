@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Customer : MonoBehaviour
@@ -12,13 +13,16 @@ public class Customer : MonoBehaviour
         Eating,
     }
     
+    [Header("Settings")]
     [SerializeField] private float speed = 5f;
-    [SerializeField] private CustomerStates states = CustomerStates.Waiting;
+    [SerializeField] private float maxWaitTime = 1f;
     [SerializeField] private Vector3 spawnPosition;
+    
+    [Header("Debug")]
+    [SerializeField] private CustomerStates states = CustomerStates.Waiting;
+    [SerializeField] private Item craving;
     [SerializeField] private Vector3 desiredPosition;
     [SerializeField] private Vector3 direction;
-    [SerializeField] private Item craving;
-    [SerializeField] private float maxWaitTime = 1f;
 
     private Table _table;
     private float _timeWaited = 0f;
@@ -67,6 +71,34 @@ public class Customer : MonoBehaviour
         desiredPosition = spawnPosition;
         direction = (desiredPosition - transform.position).normalized;
         ChangeState(CustomerStates.Walking);
+    }
+
+    public void SetTexture(Sprite texture)
+    {
+        SpriteRenderer rend = GetComponent<SpriteRenderer>();
+        if (rend != null)
+        {
+            rend.sprite = texture;
+        }
+    }
+
+    public void AcquireTable(Table table)
+    {
+        _table = table;
+        if (_table == null)
+        {
+            ChangeState(CustomerStates.Waiting);;
+            return;
+        }
+        
+        desiredPosition = _table.GetSeat(this);
+        direction = (desiredPosition - transform.position).normalized;
+        ChangeState(CustomerStates.Walking);
+    }
+
+    public void GiveOrder()
+    {
+        ChangeState(CustomerStates.Ordered);
     }
 
     // -------------------------------------------- Helper Functions --------------------------------------------
@@ -123,20 +155,6 @@ public class Customer : MonoBehaviour
             direction = (desiredPosition - transform.position).normalized;
             ChangeState(CustomerStates.Walking);
         }
-    }
-
-    public void AcquireTable(Table table)
-    {
-        _table = table;
-        if (_table == null)
-        {
-            ChangeState(CustomerStates.Waiting);;
-            return;
-        }
-        
-        desiredPosition = _table.GetSeat();
-        direction = (desiredPosition - transform.position).normalized;
-        ChangeState(CustomerStates.Walking);
     }
 
     private void ChangeState(CustomerStates newState)

@@ -4,8 +4,9 @@ using UnityEngine;
 public class TableHandler : MonoBehaviour
 {
     public static TableHandler Instance { get; private set; }
-    
-    [SerializeField] private List<Table> tables = new List<Table>();
+
+    [SerializeField] private GameObject environment;
+    [SerializeField] private Table[] tables;
     [SerializeField] private Queue<Table> _freeTables = new Queue<Table>();
     [SerializeField] private Queue<Customer> _waitingCustomers = new Queue<Customer>();
     [SerializeField] private Vector3 waitingPosition;
@@ -26,17 +27,12 @@ public class TableHandler : MonoBehaviour
     
     void Start()
     {
-        if (tables.Count == 0)
+        if (environment == null)
         {
-            Debug.LogError("There are no tables! Add them to the TableHandler!");
-            return;
+            Debug.LogWarning("Please add an environment (with has Tables as children)!");
         }
 
-        if (waitingPosition == Vector3.zero)
-        {
-            Debug.LogWarning("Waiting position is set to zero!");
-        }
-        
+        tables = environment.GetComponentsInChildren<Table>();
         foreach (Table table in tables) _freeTables.Enqueue(table);
     }
 

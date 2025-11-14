@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class Clickable : MonoBehaviour, IPointerClickHandler
 {
-    private enum PlayerDestination
+    private enum WaitressDestination
     {
         Top,
         Bottom,
@@ -11,7 +11,7 @@ public class Clickable : MonoBehaviour, IPointerClickHandler
         Right
     }
     
-    [SerializeField] private PlayerDestination playerDestination;
+    [SerializeField] private WaitressDestination playerDestination;
     public void OnPointerClick (PointerEventData eventData)
     {
         Vector3 targetPosition = transform.position;
@@ -20,16 +20,16 @@ public class Clickable : MonoBehaviour, IPointerClickHandler
 
         switch (playerDestination)
         {
-            case PlayerDestination.Top:
+            case WaitressDestination.Top:
                 targetPosition += new Vector3(0, 1.5f, 0);
                 break;
-            case PlayerDestination.Bottom:
+            case WaitressDestination.Bottom:
                 targetPosition += new Vector3(0, -1.5f, 0);
                 break;
-            case PlayerDestination.Left:
+            case WaitressDestination.Left:
                 targetPosition += new Vector3(-1.5f, 0, 0);
                 break;
-            case PlayerDestination.Right:
+            case WaitressDestination.Right:
                 targetPosition += new Vector3(1.5f, 0, 0);
                 break;
         }

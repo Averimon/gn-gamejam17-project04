@@ -1,40 +1,54 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class Table : MonoBehaviour
+public class Table : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] private GameObject chair1;
-    [SerializeField] private GameObject chair2;
-    
-    private List<Customer> _customers = new List<Customer>();
-    
-    void Start()
+    private enum WaitressDestination
     {
-        if (chair1 == null)
-        {
-            Debug.LogError("please add a GameObject as seat1!");
-            return;
-        }
-        if (chair2 == null)
-        {
-            Debug.LogError("please add a GameObject as seat2!");
-            return;
-        }
+        Top,
+        Bottom,
+        Left,
+        Right
     }
 
-    public Vector3 GetSeat(Customer customer)
-    {
-        _customers.Add(customer);
-        
-        if (Random.value >= 0.5) return chair1.transform.position;
-        else return chair2.transform.position;
-    }
+    public Vector2 itemPlaceOffset;
+    [SerializeField] private WaitressDestination playerDestination;
 
-    public void GetTableOrders()
+    public UnityEvent<Consumable> itemPlacedOnTable;
+    
+    public void OnPointerClick (PointerEventData eventData)
     {
-        foreach (Customer customer in _customers)
+        Vector3 targetPosition = transform.position;
+
+        Debug.Log($"Clickable object at {targetPosition} was clicked. Moving player {playerDestination}.");
+
+        switch (playerDestination)
         {
-            customer.GiveOrder();
+            case WaitressDestination.Top:
+                targetPosition += new Vector3(0, 1f, 0);
+                break;
+            case WaitressDestination.Bottom:
+                targetPosition += new Vector3(0, -1f, 0);
+                break;
+            case WaitressDestination.Left:
+                targetPosition += new Vector3(-1f, 0, 0);
+                break;
+            case WaitressDestination.Right:
+                targetPosition += new Vector3(1f, 0, 0);
+                break;
         }
+
+        WaitressMovement.Instance.MoveTo(targetPosition);
+
+        UnityEngine.Events.UnityAction onArrived = null;
+
+        onArrived = () =>
+        {
+            WaitressMovement.Instance.destinationReached.RemoveListener(onArrived);
+            WaitressInteraction.Instance.PlaceItem(this);
+        };
+
+        WaitressMovement.Instance.destinationReached.AddListener(onArrived);
     }
 }

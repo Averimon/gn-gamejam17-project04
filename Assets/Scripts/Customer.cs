@@ -24,7 +24,7 @@ public class Customer : MonoBehaviour
     [SerializeField] private Vector3 desiredPosition;
     [SerializeField] private Vector3 direction;
 
-    private Table _table;
+    private TableUnit _table;
     private float _timeWaited = 0f;
     private bool _happy = false;
     private bool _served = false;
@@ -82,7 +82,7 @@ public class Customer : MonoBehaviour
         }
     }
 
-    public void AcquireTable(Table table)
+    public void AcquireTable(TableUnit table)
     {
         _table = table;
         if (_table == null)

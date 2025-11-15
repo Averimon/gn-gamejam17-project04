@@ -8,7 +8,7 @@ public class CustomerSpawner : MonoBehaviour
     [SerializeField] private GameObject customerPrefab;
     [SerializeField] private List<GameObject> customers;
     [SerializeField] private List<Sprite> skins = new List<Sprite>();
-    [SerializeField] private Vector3 spawnPosition = new Vector3(-3.8f, 2.2, 0);
+    [SerializeField] private Vector3 spawnPosition = new Vector3(-3.8f, 2.2f, 0f);
     [SerializeField] private bool spawnEnabled = true;
     [SerializeField] private float spawnTime = 1f;
     [SerializeField] private float timePassed = 0f;

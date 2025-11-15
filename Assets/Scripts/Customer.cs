@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,6 @@ public class Customer : MonoBehaviour
     {
         Waiting,
         Walking,
-        Ordering,
         Ordered,
         Eating,
     }
@@ -17,6 +17,7 @@ public class Customer : MonoBehaviour
     [SerializeField] private float speed = 5f;
     [SerializeField] private float maxWaitTime = 1f;
     [SerializeField] private Vector3 spawnPosition;
+    [SerializeField] private List<Consumable> menu = new List<Consumable>();
     
     [Header("Debug")]
     [SerializeField] private CustomerStates states = CustomerStates.Waiting;
@@ -40,6 +41,14 @@ public class Customer : MonoBehaviour
     
     private void Start()
     {
+        if (menu.Count == 0)
+        {
+            Debug.LogError("Please add at least one Consumable to the customers menu!");
+            return;
+        }
+        craving = menu[UnityEngine.Random.Range(0, menu.Count)];
+        craving.gameObject.SetActive(true);
+        
         spawnPosition = transform.position;
         AcquireTable(TableHandler.Instance.GetFreeTable(this));
     }
@@ -56,9 +65,6 @@ public class Customer : MonoBehaviour
             case CustomerStates.Walking:
                 Move();
                 break;
-            case CustomerStates.Ordering:
-                OrderingItem();
-                break;
             case CustomerStates.Ordered:
                 OrderItem();
                 break;
@@ -72,8 +78,8 @@ public class Customer : MonoBehaviour
     public void ReceiveItem(Consumable received)
     {
         _served = true;
-        // TODO: randomize craving type
-        _happy = received.type == 0;
+        _order.SetActive(false);
+        _happy = received.type == craving.type;
 
         ChangeState(CustomerStates.Eating);
     }
@@ -97,8 +103,7 @@ public class Customer : MonoBehaviour
             return;
         }
         
-        desiredPosition = _table.GetSeat(this);
-        direction = (desiredPosition - transform.position).normalized;
+        ChangeDestination(_table.GetSeat(this));
         ChangeState(CustomerStates.Walking);
     }
 
@@ -111,31 +116,8 @@ public class Customer : MonoBehaviour
     private void OrderItem()
     {
         _order.SetActive(true);
+        StartCoroutine(LosingPatience(craving));
         ChangeState(CustomerStates.Waiting);
-        
-        /*
-        if (Vector3.Distance(WaitressMovement.Instance.transform.position, transform.position) < 0.1f &&
-            WaitressMovement.Instance.agent.remainingDistance < 0.1f)
-        {
-            Transform Order = transform.GetChild(0);
-            Order.gameObject.SetActive(false);
-            ReceiveItem(WaitressMovement.Instance.itemInHand);
-        }
-        _timeWaited = 0f;
-        */
-    }
-
-    private void OrderingItem()
-    {
-        print("todo: wait a few seconds, the player need to click on it add a random gen to get a random order");
-        
-        if (Vector3.Distance(WaitressMovement.Instance.transform.position, transform.position) < 0.1f &&
-            WaitressMovement.Instance.agent.remainingDistance < 0.1f)
-        {
-            ChangeState(CustomerStates.Ordered);
-            Transform Order = transform.GetChild(0);
-            Order.gameObject.SetActive(true);
-        }
     }
 
     private void Eating()
@@ -146,8 +128,7 @@ public class Customer : MonoBehaviour
             TableHandler.Instance.FreeTable(_table);
             _table = null;
             
-            desiredPosition = spawnPosition;
-            direction = (desiredPosition - transform.position).normalized;
+            ChangeDestination(spawnPosition);
             ChangeState(CustomerStates.Walking);
         }
     }
@@ -169,10 +150,8 @@ public class Customer : MonoBehaviour
         {
             TableHandler.Instance.FreeTable(_table);
             _table = null;
-            
-            desiredPosition = spawnPosition;
-            direction = (desiredPosition - transform.position).normalized;
             _served = true;
+            ChangeDestination(spawnPosition);
             ChangeState(CustomerStates.Walking);
         }
     }
@@ -181,5 +160,34 @@ public class Customer : MonoBehaviour
     {
         states = newState;
         if (newState != CustomerStates.Waiting) _timeWaited = 0f;
+    }
+
+    private void ChangeDestination(Vector3 newDestination)
+    {
+        desiredPosition = newDestination;
+        direction = (desiredPosition - transform.position).normalized;
+        _spriteRenderer.flipX = direction.x < 0;
+    }
+    
+    private IEnumerator LosingPatience(Consumable consumable)
+    {
+        consumable.transform.localPosition = Vector3.zero;
+
+        var mask = consumable.transform.Find("Mask").GetComponent<SpriteMask>();
+
+        float elapsedTime = 0f;
+        mask.transform.localPosition = consumable.maskStartPos;
+
+        while (elapsedTime < maxWaitTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsedTime / maxWaitTime);
+            mask.transform.localPosition = Vector3.Lerp(consumable.maskStartPos, consumable.maskEndPos, t);
+
+            yield return null;
+        }
+
+        mask.transform.localPosition = consumable.maskEndPos;
     }
 }

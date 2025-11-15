@@ -107,9 +107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 918f10c2970a620409944507bbdb178f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Consumable
-  type: 0
+  type: 1
   difficulty: {fileID: 11400000, guid: b7526629c24369543bad2ada25c2a369, type: 2}
-  consumableName: Blue
+  consumableName: Purple
   maskStartPos: {x: 0, y: -1.6, z: 0}
   maskEndPos: {x: 0, y: 0.43, z: 0}
   isPreview: 1

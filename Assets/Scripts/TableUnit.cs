@@ -49,6 +49,16 @@ public class TableUnit : MonoBehaviour
         else return chair2.transform.position;
     }
 
+    public void FreeTableUnit()
+    {
+        _customers.Clear();
+        if (itemOnTable != null)
+        {
+            Destroy(itemOnTable.gameObject);
+            itemOnTable = null;
+        }
+    }
+
     public void GetTableOrders()
     {
         foreach (Customer customer in _customers)

@@ -4,15 +4,15 @@ using UnityEngine;
 public class CustomerSpawner : MonoBehaviour
 {
     public static CustomerSpawner Instance { get; private set; }
-    
+
     [SerializeField] private GameObject customerPrefab;
     [SerializeField] private List<GameObject> customers;
     [SerializeField] private List<Sprite> skins = new List<Sprite>();
-    [SerializeField] private Vector3 spawnPosition = new Vector3(-3.8f, 2.2, 0);
+    [SerializeField] private Vector3 spawnPosition = new Vector3(-3.8f, 2.2f, 0);
     [SerializeField] private bool spawnEnabled = true;
-    [SerializeField] private float spawnTime = 1f;
+    [SerializeField] private float baseSpawnTime = 1f;
     [SerializeField] private float timePassed = 0f;
-    
+
     // -------------------------------------------- Event Functions --------------------------------------------
     private void Awake()
     {
@@ -26,7 +26,7 @@ public class CustomerSpawner : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     void Start()
     {
         if (customerPrefab == null)
@@ -39,7 +39,8 @@ public class CustomerSpawner : MonoBehaviour
 
     void Update()
     {
-        if (spawnEnabled && timePassed > spawnTime)
+        float effectiveSpawnTime = baseSpawnTime / GetSpawnRateMultiplier();
+        if (spawnEnabled && RestaurantManager.Instance != null && timePassed > effectiveSpawnTime)
         {
             SpawnCustomer();
             timePassed = 0f;
@@ -49,18 +50,32 @@ public class CustomerSpawner : MonoBehaviour
             timePassed += Time.deltaTime;
         }
     }
-    
+
     // -------------------------------------------- Public Functions --------------------------------------------
     public void ToggleSpawner()
     {
         spawnEnabled = !spawnEnabled;
     }
-    
+
     // -------------------------------------------- Helper Functions --------------------------------------------
     private void SpawnCustomer()
     {
         GameObject customer = Instantiate(customerPrefab, spawnPosition, Quaternion.identity);
         customer.GetComponent<Customer>().SetTexture(skins[Random.Range(0, skins.Count)]);
         customers.Add(customer);
+    }
+
+    public void ApplySpawnRateMultiplier()
+    {
+        // Spawn rate is applied in Update() method
+    }
+
+    private float GetSpawnRateMultiplier()
+    {
+        if (UpgradeManager.Instance != null)
+        {
+            return UpgradeManager.Instance.GetSpawnRateMultiplier();
+        }
+        return 1f;
     }
 }

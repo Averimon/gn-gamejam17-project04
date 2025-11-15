@@ -13,12 +13,12 @@ public class Customer : MonoBehaviour
         Ordered,
         Eating,
     }
-    
+
     [Header("Settings")]
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float maxWaitTime = 1f;
+    [SerializeField] private float baseMaxWaitTime = 1f;
     [SerializeField] private Vector3 spawnPosition;
-    
+
     [Header("Debug")]
     [SerializeField] private CustomerStates states = CustomerStates.Waiting;
     [SerializeField] private Consumable craving;
@@ -41,6 +41,7 @@ public class Customer : MonoBehaviour
         spawnPosition = transform.position;
         AcquireTable(TableHandler.Instance.GetFreeTable(this));
         agent.SetDestination(desiredPosition);
+        ApplyPatienceMultiplier(); // Apply initial multiplier
     }
 
     private void Update()
@@ -52,7 +53,7 @@ public class Customer : MonoBehaviour
             {
                 ChangeState(CustomerStates.Ordering);
             }
-                
+
             else
                 Destroy(gameObject);
         }
@@ -86,6 +87,8 @@ public class Customer : MonoBehaviour
         desiredPosition = spawnPosition;
         direction = (desiredPosition - transform.position).normalized;
         ChangeState(CustomerStates.Walking);
+        agent.isStopped = false;
+        agent.SetDestination(desiredPosition);
     }
 
     public void SetTexture(Sprite texture)
@@ -102,10 +105,10 @@ public class Customer : MonoBehaviour
         _table = table;
         if (_table == null)
         {
-            ChangeState(CustomerStates.Waiting);;
+            ChangeState(CustomerStates.Waiting); ;
             return;
         }
-        
+
         desiredPosition = _table.GetSeat(this);
         direction = (desiredPosition - transform.position).normalized;
         ChangeState(CustomerStates.Walking);
@@ -120,7 +123,7 @@ public class Customer : MonoBehaviour
     private void OrderItem()
     {
         print("todo: Add a timer to simulate ordering time");
-        if (Vector3.Distance(WaitressMovement.Instance.transform.position, transform.position) < 0.1f &&
+        if (Vector3.Distance(WaitressMovement.Instance.transform.position, _table.gameObject.transform.position) <= 1f &&
             WaitressMovement.Instance.agent.remainingDistance < 0.1f)
         {
             print("todo: verify if order that player brought is correct");
@@ -134,8 +137,8 @@ public class Customer : MonoBehaviour
     private void OrderingItem()
     {
         print("todo: wait a few seconds, the player need to click on it add a random gen to get a random order");
-        
-        if (Vector3.Distance(WaitressMovement.Instance.transform.position, _table.gameObject.transform.position) < 1f &&
+
+        if (Vector3.Distance(WaitressMovement.Instance.transform.position, _table.gameObject.transform.position) <= 1f &&
             WaitressMovement.Instance.agent.remainingDistance < 0.1f)
         {
             ChangeState(CustomerStates.Ordered);
@@ -150,7 +153,7 @@ public class Customer : MonoBehaviour
         if (_timeWaited > 2f)
         {
             TableHandler.Instance.FreeTable(_table);
-            
+
             desiredPosition = spawnPosition;
             direction = (desiredPosition - transform.position).normalized;
             ChangeState(CustomerStates.Walking);
@@ -166,10 +169,11 @@ public class Customer : MonoBehaviour
     private void Wait()
     {
         _timeWaited += Time.deltaTime;
-        if (_timeWaited > maxWaitTime)
+        float effectiveMaxWaitTime = baseMaxWaitTime * GetPatienceMultiplier();
+        if (_timeWaited > effectiveMaxWaitTime)
         {
             TableHandler.Instance.FreeTable(_table);
-            
+
             desiredPosition = spawnPosition;
             direction = (desiredPosition - transform.position).normalized;
             ChangeState(CustomerStates.Walking);
@@ -180,5 +184,19 @@ public class Customer : MonoBehaviour
     {
         states = newState;
         if (newState != CustomerStates.Waiting) _timeWaited = 0f;
+    }
+
+    private void ApplyPatienceMultiplier()
+    {
+        // Patience is applied in Wait() method
+    }
+
+    private float GetPatienceMultiplier()
+    {
+        if (UpgradeManager.Instance != null)
+        {
+            return UpgradeManager.Instance.GetCustomerPatienceMultiplier();
+        }
+        return 1f;
     }
 }

@@ -12,6 +12,7 @@ public class WaitressMovement : MonoBehaviour
 
     private bool hasDestination = false;
     [SerializeField] private float arrivalThreshold = 0.05f;
+    [SerializeField] private float baseSpeed = 3.5f; // Default NavMeshAgent speed
 
     private void Awake()
     {
@@ -24,9 +25,12 @@ public class WaitressMovement : MonoBehaviour
             agent.updateUpAxis = false;
             agent.height = 1.0f;
             agent.baseOffset = 0.3f;
+            agent.speed = baseSpeed; // Set initial speed
 
             if (destinationReached == null)
                 destinationReached = new UnityEvent();
+
+            ApplySpeedMultiplier(); // Apply initial multiplier
         }
         else
         {
@@ -52,5 +56,13 @@ public class WaitressMovement : MonoBehaviour
         agent.isStopped = false;
         agent.SetDestination(locationToMove);
         hasDestination = true;
+    }
+
+    public void ApplySpeedMultiplier()
+    {
+        if (UpgradeManager.Instance != null)
+        {
+            agent.speed = baseSpeed * UpgradeManager.Instance.GetWaitressSpeedMultiplier();
+        }
     }
 }

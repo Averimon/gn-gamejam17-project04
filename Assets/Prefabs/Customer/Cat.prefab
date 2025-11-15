@@ -290,7 +290,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5689695010158844019
 Transform:
   m_ObjectHideFlags: 0
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Customer
   speed: 5
-  maxWaitTime: 1
+  baseMaxWaitTime: 1
   spawnPosition: {x: 0, y: 0, z: 0}
   states: 0
   craving: {fileID: 0}

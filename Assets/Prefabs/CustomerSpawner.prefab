@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: CustomerSpawner
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -44,13 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a33a24957d10a495eb061e7b65ad219f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomerSpawner
-  customerPrefab: {fileID: 7790308365399024018, guid: 235b4e7df4870412798af1bcb5e48d17, type: 3}
+  customerPrefabs:
+  - {fileID: 7790308365399024018, guid: 2fde6a8d631cf884f86f322764926421, type: 3}
+  - {fileID: 7790308365399024018, guid: a8acec503c9ad9b48ac3fde50c9f46d4, type: 3}
+  - {fileID: 7790308365399024018, guid: 193145dda1dfd964aa195d597b068bf0, type: 3}
+  - {fileID: 7790308365399024018, guid: 212b839ac2b0cf74dad04cb42681c753, type: 3}
+  - {fileID: 7790308365399024018, guid: 1908bce0a6213a845aa53243b2aa26d1, type: 3}
   customers: []
-  skins:
-  - {fileID: 2552915457648141491, guid: 8edc8bb191acc4c4581cc6344de26445, type: 3}
-  - {fileID: -604124769872187292, guid: f3e8773fd40f749f4baffd9b1533a500, type: 3}
-  - {fileID: -7664462985488508404, guid: 95df816e0021145df9602f607abd5055, type: 3}
-  spawnPosition: {x: -9, y: -3, z: -1}
+  spawnPosition: {x: -3.8, y: 2.2, z: 0}
   spawnEnabled: 1
   spawnTime: 2
   timePassed: 0

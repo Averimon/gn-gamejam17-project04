@@ -29,7 +29,30 @@ public class Customer : MonoBehaviour
     private bool _happy = false;
     private bool _served = false;
 
+    private SpriteRenderer _mainSpriteRenderer;
+    private SpriteRenderer _highlightSpriteRenderer;
+    private Sprite _lastSprite;
+    private Animator _animator;
+
     // -------------------------------------------- Event Functions --------------------------------------------
+    void Awake()
+    {
+        _mainSpriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
+
+        Transform colorSpriteChild = transform.Find("ColorSprite");
+        if (colorSpriteChild != null)
+        {
+            _highlightSpriteRenderer = colorSpriteChild.GetComponent<SpriteRenderer>();
+        }
+
+        if (_mainSpriteRenderer != null && _highlightSpriteRenderer != null)
+        {
+            _lastSprite = _mainSpriteRenderer.sprite;
+            _highlightSpriteRenderer.sprite = _lastSprite;
+        }
+    }
+
     private void Start()
     {
         spawnPosition = transform.position;
@@ -38,21 +61,35 @@ public class Customer : MonoBehaviour
 
     private void Update()
     {
+        if (_mainSpriteRenderer != null && _highlightSpriteRenderer != null)
+        {
+            if (_mainSpriteRenderer.sprite != _lastSprite)
+            {
+                _lastSprite = _mainSpriteRenderer.sprite;
+                _highlightSpriteRenderer.sprite = _lastSprite;
+            }
+        }
+
         switch (states)
         {
             case CustomerStates.Waiting:
                 Wait();
                 break;
             case CustomerStates.Walking:
+                _animator.SetBool("isSitting", false);
+                _animator.SetBool("isWalking", true);
                 Move();
                 break;
             case CustomerStates.Ordering:
+                _animator.SetBool("isWalking", false);
+                _animator.SetBool("isSitting", true);
                 OrderingItem();
                 break;
             case CustomerStates.Ordered:
                 OrderItem();
                 break;
             case CustomerStates.Eating:
+                _animator.SetBool("isHappy", true);
                 Eating();
                 break;
         }

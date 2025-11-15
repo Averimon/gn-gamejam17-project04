@@ -290,7 +290,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5689695010158844019
 Transform:
   m_ObjectHideFlags: 0
@@ -428,6 +428,9 @@ MonoBehaviour:
   speed: 5
   baseMaxWaitTime: 1
   spawnPosition: {x: 0, y: 0, z: 0}
+  menu:
+  - {fileID: -4117017873326916894, guid: 7efa7c4639ea97647878e910aec45d81, type: 3}
+  - {fileID: -4117017873326916894, guid: 5edbfdac7b95fdc49bff7606f12f4417, type: 3}
   states: 0
   craving: {fileID: 0}
   desiredPosition: {x: 0, y: 0, z: 0}
@@ -443,7 +446,7 @@ Animator:
   m_GameObject: {fileID: 7790308365399024018}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fe5cb8817ac5817428557022e9cf4381, type: 2}
+  m_Controller: {fileID: 9100000, guid: 377308d2d7eeb874ab8c231cc933ba16, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

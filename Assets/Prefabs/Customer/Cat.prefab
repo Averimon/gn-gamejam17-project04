@@ -428,6 +428,9 @@ MonoBehaviour:
   speed: 5
   baseMaxWaitTime: 1
   spawnPosition: {x: 0, y: 0, z: 0}
+  menu:
+  - {fileID: -4117017873326916894, guid: 7efa7c4639ea97647878e910aec45d81, type: 3}
+  - {fileID: -4117017873326916894, guid: 5edbfdac7b95fdc49bff7606f12f4417, type: 3}
   states: 0
   craving: {fileID: 0}
   desiredPosition: {x: 0, y: 0, z: 0}

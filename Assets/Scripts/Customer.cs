@@ -27,7 +27,6 @@ public class Customer : MonoBehaviour
     [SerializeField] private Vector3 direction;
     [SerializeField] private UnityEngine.AI.NavMeshAgent agent;
 
-    private SpriteRenderer _spriteRenderer;
     private GameObject _order;
     private TableUnit _table;
     private float _timeWaited = 0f;
@@ -40,15 +39,11 @@ public class Customer : MonoBehaviour
     private Animator _animator;
 
     // -------------------------------------------- Event Functions --------------------------------------------
-    private void Awake()
-    {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _order = transform.GetChild(0).gameObject;
-    }
     
     void Awake()
     {
         _mainSpriteRenderer = GetComponent<SpriteRenderer>();
+        _order = transform.GetChild(0).gameObject;
         _animator = GetComponent<Animator>();
 
         Transform colorSpriteChild = transform.Find("ColorSprite");
@@ -102,7 +97,7 @@ public class Customer : MonoBehaviour
             agent.isStopped = true;
             if (spawnPosition != desiredPosition)
             {
-                ChangeState(CustomerStates.Ordering);
+                //REFACTO: ChangeState(CustomerStates.Ordering);
             }
 
             else
@@ -119,12 +114,12 @@ public class Customer : MonoBehaviour
                 _animator.SetBool("isWalking", true);
                 Move();
                 break;
-            case CustomerStates.Ordering:
+            /*REFACTOR: case CustomerStates.Ordering:
+                OrderingItem();
+                break;*/
+            case CustomerStates.Ordered:
                 _animator.SetBool("isWalking", false);
                 _animator.SetBool("isSitting", true);
-                OrderingItem();
-                break;
-            case CustomerStates.Ordered:
                 OrderItem();
                 break;
             case CustomerStates.Eating:
@@ -154,12 +149,12 @@ public class Customer : MonoBehaviour
 
     public void SetTexture(Sprite texture)
     {
-        if (_spriteRenderer != null)
+        if (_mainSpriteRenderer != null)
         {
-            _spriteRenderer.sprite = texture;
+            _mainSpriteRenderer.sprite = texture;
         }
         
-        _spriteRenderer.color = Color.gray7;
+        _mainSpriteRenderer.color = Color.gray7;
     }
 
     public void AcquireTable(TableUnit table)
@@ -217,7 +212,7 @@ public class Customer : MonoBehaviour
     {
         if (_timeWaited > 2f)
         {
-            if (_happy) _spriteRenderer.color = Color.white;
+            if (_happy) _mainSpriteRenderer.color = Color.white;
             TableHandler.Instance.FreeTable(_table);
             _table = null;
             
@@ -275,7 +270,7 @@ public class Customer : MonoBehaviour
     {
         desiredPosition = newDestination;
         direction = (desiredPosition - transform.position).normalized;
-        _spriteRenderer.flipX = direction.x < 0;
+        _mainSpriteRenderer.flipX = direction.x < 0;
     }
     
     private IEnumerator LosingPatience(Consumable consumable)
@@ -287,11 +282,11 @@ public class Customer : MonoBehaviour
         float elapsedTime = 0f;
         mask.transform.localPosition = consumable.maskStartPos;
 
-        while (elapsedTime < maxWaitTime)
+        while (elapsedTime < baseMaxWaitTime)
         {
             elapsedTime += Time.deltaTime;
 
-            float t = Mathf.Clamp01(elapsedTime / maxWaitTime);
+            float t = Mathf.Clamp01(elapsedTime / baseMaxWaitTime);
             mask.transform.localPosition = Vector3.Lerp(consumable.maskStartPos, consumable.maskEndPos, t);
 
             yield return null;

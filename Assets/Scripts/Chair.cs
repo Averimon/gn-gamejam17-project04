@@ -19,7 +19,7 @@ public class Chair : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         shadowRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        SetChairColor();
+        // SetChairColor();
     }
     
     private void SetChairColor()

@@ -1016,10 +1016,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dog
       objectReference: {fileID: 0}
-    - target: {fileID: 7790308365399024018, guid: a8acec503c9ad9b48ac3fde50c9f46d4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1660,10 +1656,6 @@ PrefabInstance:
     - target: {fileID: 7790308365399024018, guid: 2fde6a8d631cf884f86f322764926421, type: 3}
       propertyPath: m_Name
       value: Cat
-      objectReference: {fileID: 0}
-    - target: {fileID: 7790308365399024018, guid: 2fde6a8d631cf884f86f322764926421, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

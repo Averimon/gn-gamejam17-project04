@@ -2092,18 +2092,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1774486864967301707, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
-      propertyPath: m_SortingOrder
-      value: -70
-      objectReference: {fileID: 0}
-    - target: {fileID: 4962306285846881952, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 519420031}
-    - target: {fileID: 7453801893727151116, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 519420031}
     - target: {fileID: 7506339621384870525, guid: cc172fa137c934549b67f8cc8ae492a1, type: 3}
       propertyPath: m_Name
       value: Barista

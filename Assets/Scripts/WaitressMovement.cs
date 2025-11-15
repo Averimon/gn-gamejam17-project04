@@ -10,6 +10,7 @@ public class WaitressMovement : MonoBehaviour
     public Consumable itemInHand;
     public NavMeshAgent agent;
 
+    private Animator animator;
     private bool hasDestination = false;
     [SerializeField] private float arrivalThreshold = 0.05f;
 
@@ -30,6 +31,8 @@ public class WaitressMovement : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -42,6 +45,7 @@ public class WaitressMovement : MonoBehaviour
             hasDestination = false;
             agent.isStopped = true;
             destinationReached?.Invoke();
+            animator.SetBool("isWalking", false);
         }
     }
 
@@ -50,5 +54,13 @@ public class WaitressMovement : MonoBehaviour
         agent.isStopped = false;
         agent.SetDestination(locationToMove);
         hasDestination = true;
+        animator.SetBool("isWalking", true);
+
+        Vector3 direction = locationToMove - transform.position;
+
+        if (direction.x > 0f)
+            transform.localScale = new Vector3(1, 1, 1);   // looking right
+        else if (direction.x < 0f)
+            transform.localScale = new Vector3(-1, 1, 1);  // looking left
     }
 }

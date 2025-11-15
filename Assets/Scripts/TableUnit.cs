@@ -35,6 +35,10 @@ public class TableUnit : MonoBehaviour
     private void HandleItemPlaced(Consumable item)
     {
         itemOnTable = item;
+        foreach (Customer customer in _customers)
+        {
+            customer.ReceiveItem(itemOnTable);
+        }
     }
 
     public Vector3 GetSeat(Customer customer)

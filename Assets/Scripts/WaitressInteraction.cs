@@ -26,6 +26,8 @@ public class WaitressInteraction : MonoBehaviour
 
         consumable.transform.SetParent(WaitressMovement.Instance.transform);
         consumable.transform.localPosition = (Vector3)itemHoldOffset;
+        
+        Barista.Instance.FreeReadyConsumableSpawnPoint();
     }
 
     public void PlaceItem(Table table)

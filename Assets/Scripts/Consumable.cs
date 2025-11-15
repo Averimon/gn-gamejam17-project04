@@ -5,14 +5,24 @@ using UnityEngine.EventSystems;
 public class Consumable : MonoBehaviour, IPointerClickHandler
 {
     public int type;
+    public ConsumableDifficulty difficulty;
 
     [SerializeField] private string consumableName;
-    [SerializeField] private ConsumableDifficulty difficulty;
+    
+    public Vector3 maskStartPos;
+    public Vector3 maskEndPos;
+    public bool isPreview = true;
 
     private bool isWaiting = false;
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (isPreview)
+        {
+            Barista.Instance.ItemOrdered(this);
+            return;
+        }
+
         if (isWaiting) return;
         isWaiting = true;
 

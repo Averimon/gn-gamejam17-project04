@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b389447b7e2e2864595e50ce0dbde552, type: 3}
   m_Name: Easy ConsumableDifficulty
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableDifficulty
+  preparationTime: 3
   difficultyName: Easy
-  preperationTime: 1

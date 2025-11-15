@@ -49,6 +49,8 @@ public class TableHandler : MonoBehaviour
 
     public void FreeTable(TableUnit table)
     {
+        // for test purposes
+        table.itemOnTable = null;
         print("Table freed!");
         if (_waitingCustomers.Count > 0)
         {

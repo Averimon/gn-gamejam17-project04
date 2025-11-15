@@ -24,12 +24,20 @@ public class Customer : MonoBehaviour
     [SerializeField] private Vector3 desiredPosition;
     [SerializeField] private Vector3 direction;
 
+    private SpriteRenderer _spriteRenderer;
+    private GameObject _order;
     private TableUnit _table;
     private float _timeWaited = 0f;
     private bool _happy = false;
     private bool _served = false;
 
     // -------------------------------------------- Event Functions --------------------------------------------
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _order = transform.GetChild(0).gameObject;
+    }
+    
     private void Start()
     {
         spawnPosition = transform.position;
@@ -38,6 +46,8 @@ public class Customer : MonoBehaviour
 
     private void Update()
     {
+        _timeWaited += Time.deltaTime;
+        
         switch (states)
         {
             case CustomerStates.Waiting:
@@ -62,24 +72,20 @@ public class Customer : MonoBehaviour
     public void ReceiveItem(Consumable received)
     {
         _served = true;
-        _happy = received.type == craving.type;
+        // TODO: randomize craving type
+        _happy = received.type == 0;
 
         ChangeState(CustomerStates.Eating);
-        print("todo: Wait a few seconds?");
-
-        TableHandler.Instance.FreeTable(_table);
-        desiredPosition = spawnPosition;
-        direction = (desiredPosition - transform.position).normalized;
-        ChangeState(CustomerStates.Walking);
     }
 
     public void SetTexture(Sprite texture)
     {
-        SpriteRenderer rend = GetComponent<SpriteRenderer>();
-        if (rend != null)
+        if (_spriteRenderer != null)
         {
-            rend.sprite = texture;
+            _spriteRenderer.sprite = texture;
         }
+        
+        _spriteRenderer.color = Color.gray7;
     }
 
     public void AcquireTable(TableUnit table)
@@ -87,7 +93,7 @@ public class Customer : MonoBehaviour
         _table = table;
         if (_table == null)
         {
-            ChangeState(CustomerStates.Waiting);;
+            ChangeState(CustomerStates.Waiting);
             return;
         }
         
@@ -104,16 +110,19 @@ public class Customer : MonoBehaviour
     // -------------------------------------------- Helper Functions --------------------------------------------
     private void OrderItem()
     {
-        print("todo: Add a timer to simulate ordering time");
+        _order.SetActive(true);
+        ChangeState(CustomerStates.Waiting);
+        
+        /*
         if (Vector3.Distance(WaitressMovement.Instance.transform.position, transform.position) < 0.1f &&
             WaitressMovement.Instance.agent.remainingDistance < 0.1f)
         {
-            print("todo: verify if order that player brought is correct");
             Transform Order = transform.GetChild(0);
             Order.gameObject.SetActive(false);
             ReceiveItem(WaitressMovement.Instance.itemInHand);
         }
         _timeWaited = 0f;
+        */
     }
 
     private void OrderingItem()
@@ -131,32 +140,39 @@ public class Customer : MonoBehaviour
 
     private void Eating()
     {
-        _timeWaited += Time.deltaTime;
         if (_timeWaited > 2f)
         {
+            if (_happy) _spriteRenderer.color = Color.white;
             TableHandler.Instance.FreeTable(_table);
+            _table = null;
             
             desiredPosition = spawnPosition;
             direction = (desiredPosition - transform.position).normalized;
             ChangeState(CustomerStates.Walking);
         }
     }
+    
     private void Move()
     {
+        _order.SetActive(false);
         transform.position += direction * (speed * Time.deltaTime);
-        if (Vector3.Distance(transform.position, desiredPosition) < 0.1f) ChangeState(CustomerStates.Waiting);
-        if (_served && Vector3.Distance(transform.position, spawnPosition) < 0.1f) ;
+
+        if (Vector3.Distance(transform.position, desiredPosition) > 0.1f) return;
+        if (_served) Destroy(gameObject);
+        if (_table is not null) ChangeState(CustomerStates.Ordered);
+        else ChangeState(CustomerStates.Waiting);
     }
 
     private void Wait()
     {
-        _timeWaited += Time.deltaTime;
         if (_timeWaited > maxWaitTime)
         {
             TableHandler.Instance.FreeTable(_table);
+            _table = null;
             
             desiredPosition = spawnPosition;
             direction = (desiredPosition - transform.position).normalized;
+            _served = true;
             ChangeState(CustomerStates.Walking);
         }
     }

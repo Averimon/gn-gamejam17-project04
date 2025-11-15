@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Customer : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class Customer : MonoBehaviour
     [SerializeField] private Consumable craving;
     [SerializeField] private Vector3 desiredPosition;
     [SerializeField] private Vector3 direction;
+    [SerializeField] private UnityEngine.AI.NavMeshAgent agent;
 
     private TableUnit _table;
     private float _timeWaited = 0f;
@@ -32,19 +34,32 @@ public class Customer : MonoBehaviour
     // -------------------------------------------- Event Functions --------------------------------------------
     private void Start()
     {
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        agent.height = 1.0f;
+        agent.baseOffset = 0.3f;
         spawnPosition = transform.position;
         AcquireTable(TableHandler.Instance.GetFreeTable(this));
+        agent.SetDestination(desiredPosition);
     }
 
     private void Update()
     {
+        if (agent.remainingDistance <= 0.1f)
+        {
+            agent.isStopped = true;
+            if (spawnPosition != desiredPosition)
+            {
+                ChangeState(CustomerStates.Ordering);
+            }
+                
+            else
+                Destroy(gameObject);
+        }
         switch (states)
         {
             case CustomerStates.Waiting:
                 Wait();
-                break;
-            case CustomerStates.Walking:
-                Move();
                 break;
             case CustomerStates.Ordering:
                 OrderingItem();
@@ -120,7 +135,7 @@ public class Customer : MonoBehaviour
     {
         print("todo: wait a few seconds, the player need to click on it add a random gen to get a random order");
         
-        if (Vector3.Distance(WaitressMovement.Instance.transform.position, transform.position) < 0.1f &&
+        if (Vector3.Distance(WaitressMovement.Instance.transform.position, _table.gameObject.transform.position) < 1f &&
             WaitressMovement.Instance.agent.remainingDistance < 0.1f)
         {
             ChangeState(CustomerStates.Ordered);

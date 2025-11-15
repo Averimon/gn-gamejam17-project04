@@ -22,6 +22,8 @@ public class WaitressMovement : MonoBehaviour
 
             agent.updateRotation = false;
             agent.updateUpAxis = false;
+            agent.height = 1.0f;
+            agent.baseOffset = 0.3f;
 
             if (destinationReached == null)
                 destinationReached = new UnityEvent();

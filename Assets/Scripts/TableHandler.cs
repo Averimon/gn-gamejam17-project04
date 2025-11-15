@@ -7,9 +7,10 @@ public class TableHandler : MonoBehaviour
 
     [SerializeField] private GameObject environment;
     [SerializeField] private TableUnit[] tables;
-    [SerializeField] private Queue<TableUnit> _freeTables = new Queue<TableUnit>();
-    [SerializeField] private Queue<Customer> _waitingCustomers = new Queue<Customer>();
     [SerializeField] private Vector3 waitingPosition;
+    
+    private Queue<TableUnit> _freeTables = new Queue<TableUnit>();
+    private Queue<Customer> _waitingCustomers = new Queue<Customer>();
     
     // -------------------------------------------- Event Functions --------------------------------------------
     private void Awake()
@@ -27,10 +28,7 @@ public class TableHandler : MonoBehaviour
     
     void Start()
     {
-        if (environment == null)
-        {
-            Debug.LogWarning("Please add an environment (with has Tables as children)!");
-        }
+        if (environment == null) Debug.LogWarning("Please add an environment (with has Tables as children)!");
 
         tables = environment.GetComponentsInChildren<TableUnit>();
         foreach (TableUnit table in tables) _freeTables.Enqueue(table);
@@ -49,6 +47,9 @@ public class TableHandler : MonoBehaviour
 
     public void FreeTable(TableUnit table)
     {
+        if (table is null) return;
+        table.FreeTableUnit();
+        
         print("Table freed!");
         if (_waitingCustomers.Count > 0)
         {

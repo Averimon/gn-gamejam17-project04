@@ -35,6 +35,10 @@ public class TableUnit : MonoBehaviour
     private void HandleItemPlaced(Consumable item)
     {
         itemOnTable = item;
+        foreach (Customer customer in _customers)
+        {
+            customer.ReceiveItem(itemOnTable);
+        }
     }
 
     public Vector3 GetSeat(Customer customer)
@@ -43,6 +47,16 @@ public class TableUnit : MonoBehaviour
         
         if (Random.value >= 0.5) return chair1.transform.position;
         else return chair2.transform.position;
+    }
+
+    public void FreeTableUnit()
+    {
+        _customers.Clear();
+        if (itemOnTable != null)
+        {
+            Destroy(itemOnTable.gameObject);
+            itemOnTable = null;
+        }
     }
 
     public void GetTableOrders()

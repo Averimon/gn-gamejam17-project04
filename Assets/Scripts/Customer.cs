@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,7 +10,6 @@ public class Customer : MonoBehaviour
     {
         Waiting,
         Walking,
-        Ordering,
         Ordered,
         Eating,
     }
@@ -18,7 +18,8 @@ public class Customer : MonoBehaviour
     [SerializeField] private float speed = 5f;
     [SerializeField] private float baseMaxWaitTime = 1f;
     [SerializeField] private Vector3 spawnPosition;
-
+    [SerializeField] private List<Consumable> menu = new List<Consumable>();
+    
     [Header("Debug")]
     [SerializeField] private CustomerStates states = CustomerStates.Waiting;
     [SerializeField] private Consumable craving;
@@ -26,6 +27,8 @@ public class Customer : MonoBehaviour
     [SerializeField] private Vector3 direction;
     [SerializeField] private UnityEngine.AI.NavMeshAgent agent;
 
+    private SpriteRenderer _spriteRenderer;
+    private GameObject _order;
     private TableUnit _table;
     private float _timeWaited = 0f;
     private bool _happy = false;
@@ -37,6 +40,12 @@ public class Customer : MonoBehaviour
     private Animator _animator;
 
     // -------------------------------------------- Event Functions --------------------------------------------
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _order = transform.GetChild(0).gameObject;
+    }
+    
     void Awake()
     {
         _mainSpriteRenderer = GetComponent<SpriteRenderer>();
@@ -61,6 +70,14 @@ public class Customer : MonoBehaviour
         agent.updateUpAxis = false;
         agent.height = 1.0f;
         agent.baseOffset = 0.3f;
+        if (menu.Count == 0)
+        {
+            Debug.LogError("Please add at least one Consumable to the customers menu!");
+            return;
+        }
+        craving = menu[UnityEngine.Random.Range(0, menu.Count)];
+        craving.gameObject.SetActive(true);
+        
         spawnPosition = transform.position;
         AcquireTable(TableHandler.Instance.GetFreeTable(this));
         agent.SetDestination(desiredPosition);
@@ -69,6 +86,8 @@ public class Customer : MonoBehaviour
 
     private void Update()
     {
+        _timeWaited += Time.deltaTime;
+        
         if (_mainSpriteRenderer != null && _highlightSpriteRenderer != null)
         {
             if (_mainSpriteRenderer.sprite != _lastSprite)
@@ -119,6 +138,7 @@ public class Customer : MonoBehaviour
     public void ReceiveItem(Consumable received)
     {
         _served = true;
+        _order.SetActive(false);
         _happy = received.type == craving.type;
 
         ChangeState(CustomerStates.Eating);
@@ -134,11 +154,12 @@ public class Customer : MonoBehaviour
 
     public void SetTexture(Sprite texture)
     {
-        SpriteRenderer rend = GetComponent<SpriteRenderer>();
-        if (rend != null)
+        if (_spriteRenderer != null)
         {
-            rend.sprite = texture;
+            _spriteRenderer.sprite = texture;
         }
+        
+        _spriteRenderer.color = Color.gray7;
     }
 
     public void AcquireTable(TableUnit table)
@@ -146,12 +167,11 @@ public class Customer : MonoBehaviour
         _table = table;
         if (_table == null)
         {
-            ChangeState(CustomerStates.Waiting); ;
+            ChangeState(CustomerStates.Waiting);
             return;
         }
-
-        desiredPosition = _table.GetSeat(this);
-        direction = (desiredPosition - transform.position).normalized;
+        
+        ChangeDestination(_table.GetSeat(this));
         ChangeState(CustomerStates.Walking);
     }
 
@@ -163,6 +183,8 @@ public class Customer : MonoBehaviour
     // -------------------------------------------- Helper Functions --------------------------------------------
     private void OrderItem()
     {
+        _order.SetActive(true);
+        StartCoroutine(LosingPatience(craving));
         print("todo: Add a timer to simulate ordering time");
         if (Vector3.Distance(WaitressMovement.Instance.transform.position, _table.gameObject.transform.position) <= 1f &&
             WaitressMovement.Instance.agent.remainingDistance < 0.1f)
@@ -174,6 +196,9 @@ public class Customer : MonoBehaviour
         }
         _timeWaited = 0f;
     }
+
+    // TODO: THIS LINE SHOULD BE PLACED SOMEWHERE HERE ??
+    // ChangeState(CustomerStates.Waiting);
 
     private void OrderingItem()
     {
@@ -190,21 +215,26 @@ public class Customer : MonoBehaviour
 
     private void Eating()
     {
-        _timeWaited += Time.deltaTime;
         if (_timeWaited > 2f)
         {
+            if (_happy) _spriteRenderer.color = Color.white;
             TableHandler.Instance.FreeTable(_table);
-
-            desiredPosition = spawnPosition;
-            direction = (desiredPosition - transform.position).normalized;
+            _table = null;
+            
+            ChangeDestination(spawnPosition);
             ChangeState(CustomerStates.Walking);
         }
     }
+    
     private void Move()
     {
+        _order.SetActive(false);
         transform.position += direction * (speed * Time.deltaTime);
-        if (Vector3.Distance(transform.position, desiredPosition) < 0.1f) ChangeState(CustomerStates.Waiting);
-        if (_served && Vector3.Distance(transform.position, spawnPosition) < 0.1f) ;
+
+        if (Vector3.Distance(transform.position, desiredPosition) > 0.1f) return;
+        if (_served) Destroy(gameObject);
+        if (_table is not null) ChangeState(CustomerStates.Ordered);
+        else ChangeState(CustomerStates.Waiting);
     }
 
     private void Wait()
@@ -214,9 +244,9 @@ public class Customer : MonoBehaviour
         if (_timeWaited > effectiveMaxWaitTime)
         {
             TableHandler.Instance.FreeTable(_table);
-
-            desiredPosition = spawnPosition;
-            direction = (desiredPosition - transform.position).normalized;
+            _table = null;
+            _served = true;
+            ChangeDestination(spawnPosition);
             ChangeState(CustomerStates.Walking);
         }
     }
@@ -239,5 +269,34 @@ public class Customer : MonoBehaviour
             return UpgradeManager.Instance.GetCustomerPatienceMultiplier();
         }
         return 1f;
+    }
+
+    private void ChangeDestination(Vector3 newDestination)
+    {
+        desiredPosition = newDestination;
+        direction = (desiredPosition - transform.position).normalized;
+        _spriteRenderer.flipX = direction.x < 0;
+    }
+    
+    private IEnumerator LosingPatience(Consumable consumable)
+    {
+        consumable.transform.localPosition = Vector3.zero;
+
+        var mask = consumable.transform.Find("Mask").GetComponent<SpriteMask>();
+
+        float elapsedTime = 0f;
+        mask.transform.localPosition = consumable.maskStartPos;
+
+        while (elapsedTime < maxWaitTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsedTime / maxWaitTime);
+            mask.transform.localPosition = Vector3.Lerp(consumable.maskStartPos, consumable.maskEndPos, t);
+
+            yield return null;
+        }
+
+        mask.transform.localPosition = consumable.maskEndPos;
     }
 }

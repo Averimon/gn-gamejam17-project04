@@ -4,7 +4,9 @@ public class WaitressInteraction : MonoBehaviour
 {   
     public static WaitressInteraction Instance { get; private set; }
 
-    [SerializeField] private Vector2 itemHoldOffset;
+    [SerializeField] private Transform itemHoldOffset;
+
+    private Animator animator;
 
     private void Awake()
     {
@@ -17,21 +19,25 @@ public class WaitressInteraction : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        animator = GetComponent<Animator>();
     }
 
     public void PickUpItem(Consumable consumable)
     {
+        animator.SetBool("isServing", true);
         Debug.Log($"Picked up consumable: {consumable}");
         WaitressMovement.Instance.itemInHand = consumable;
 
         consumable.transform.SetParent(WaitressMovement.Instance.transform);
-        consumable.transform.localPosition = (Vector3)itemHoldOffset;
+        consumable.transform.localPosition = itemHoldOffset.localPosition;
         
         Barista.Instance.FreeReadyConsumableSpawnPoint();
     }
 
     public void PlaceItem(Table table)
     {
+        animator.SetBool("isServing", false);
         Consumable item = WaitressMovement.Instance.itemInHand;
         if (item == null)
         {

@@ -4,11 +4,13 @@ using UnityEngine;
 public class CustomerSpawner : MonoBehaviour
 {
     public static CustomerSpawner Instance { get; private set; }
-
-    [SerializeField] private GameObject customerPrefab;
-    [SerializeField] private List<GameObject> customers;
-    [SerializeField] private List<Sprite> skins = new List<Sprite>();
-    [SerializeField] private Vector3 spawnPosition = new Vector3(-3.8f, 2.2f, 0f);
+    
+    [Header("Prefabs")]
+    [SerializeField] private List<GameObject> customerPrefabs = new List<GameObject>(); // finished customer variants
+    [SerializeField] private List<GameObject> customers = new List<GameObject>();       // active customers in the scene
+    
+    [Header("Spawn Settings")]
+    [SerializeField] private Vector3 spawnPosition = Vector3.zero;
     [SerializeField] private bool spawnEnabled = true;
     [SerializeField] private float baseSpawnTime = 1f;
     [SerializeField] private float timePassed = 0f;
@@ -16,6 +18,7 @@ public class CustomerSpawner : MonoBehaviour
     // -------------------------------------------- Event Functions --------------------------------------------
     private void Awake()
     {
+        // Singleton setup
         if (Instance == null)
         {
             Instance = this;
@@ -26,18 +29,17 @@ public class CustomerSpawner : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    void Start()
+    
+    private void Start()
     {
-        if (customerPrefab == null)
+        // Check if prefab list is assigned
+        if (customerPrefabs == null || customerPrefabs.Count == 0)
         {
-            Debug.LogError("CustomerPrefab is null, add to this script where it is used in the scene!");
-            return;
+            Debug.LogError("CustomerSpawner: 'customerPrefabs' is empty. Please assign finished customer prefabs in the inspector.");
         }
-        if (skins.Count <= 0) Debug.LogError("Customer skins must have at least one skin");
     }
 
-    void Update()
+    private void Update()
     {
         float effectiveSpawnTime = baseSpawnTime / GetSpawnRateMultiplier();
         if (spawnEnabled && RestaurantManager.Instance != null && timePassed > effectiveSpawnTime)
@@ -54,14 +56,32 @@ public class CustomerSpawner : MonoBehaviour
     // -------------------------------------------- Public Functions --------------------------------------------
     public void ToggleSpawner()
     {
+        // Enables or disables the spawner
         spawnEnabled = !spawnEnabled;
     }
 
     // -------------------------------------------- Helper Functions --------------------------------------------
     private void SpawnCustomer()
     {
-        GameObject customer = Instantiate(customerPrefab, spawnPosition, Quaternion.identity);
-        customer.GetComponent<Customer>().SetTexture(skins[Random.Range(0, skins.Count)]);
+        // Safety checks
+        if (customerPrefabs == null || customerPrefabs.Count == 0)
+        {
+            Debug.LogWarning("CustomerSpawner: No prefabs assigned in 'customerPrefabs'.");
+            return;
+        }
+
+        // Pick a random finished customer prefab
+        GameObject prefabToSpawn = customerPrefabs[Random.Range(0, customerPrefabs.Count)];
+        if (prefabToSpawn == null)
+        {
+            Debug.LogWarning("CustomerSpawner: One of the prefabs in 'customerPrefabs' is null.");
+            return;
+        }
+
+        // Spawn the customer
+        GameObject customer = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+        
+        // Add to list of active customers
         customers.Add(customer);
     }
 

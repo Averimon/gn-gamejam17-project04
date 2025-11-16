@@ -278,20 +278,24 @@ public class Customer : MonoBehaviour
         consumable.transform.localPosition = Vector3.zero;
 
         var mask = consumable.transform.Find("Mask").GetComponent<SpriteMask>();
+        
+        Vector3 endPos = mask.transform.localPosition;
+        float maskScaleOffset = mask.transform.localScale.y;
+        Vector3 startPos = new Vector3(endPos.x, endPos.y - maskScaleOffset, endPos.z);
 
         float elapsedTime = 0f;
-        mask.transform.localPosition = consumable.maskStartPos;
+        mask.transform.localPosition = startPos;
 
         while (elapsedTime < baseMaxWaitTime)
         {
             elapsedTime += Time.deltaTime;
 
             float t = Mathf.Clamp01(elapsedTime / baseMaxWaitTime);
-            mask.transform.localPosition = Vector3.Lerp(consumable.maskStartPos, consumable.maskEndPos, t);
+            mask.transform.localPosition = Vector3.Lerp(startPos, endPos, t);
 
             yield return null;
         }
 
-        mask.transform.localPosition = consumable.maskEndPos;
+        mask.transform.localPosition = endPos;
     }
 }

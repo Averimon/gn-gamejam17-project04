@@ -110,8 +110,6 @@ MonoBehaviour:
   type: 1
   difficulty: {fileID: 11400000, guid: b7526629c24369543bad2ada25c2a369, type: 2}
   consumableName: Purple
-  maskStartPos: {x: 0, y: -1.6, z: 0}
-  maskEndPos: {x: 0, y: 0.43, z: 0}
   isPreview: 1
 --- !u!61 &219062914402406910
 BoxCollider2D:
@@ -150,7 +148,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0.9387797}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5031432, y: 0.27054852}
     oldSize: {x: 2.8333333, y: 2.8333333}
     newSize: {x: 1.15, y: 2.61}
     adaptiveTilingThreshold: 0.5
@@ -275,8 +273,8 @@ Transform:
   m_GameObject: {fileID: 7690236699574226936}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0873, y: -0.028, z: 0}
-  m_LocalScale: {x: 1.6746, y: 2.1382449, z: 1}
+  m_LocalPosition: {x: -0.026, y: 0.727, z: 0}
+  m_LocalScale: {x: 1.1282617, y: 1.9346838, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7966999922588920443}
@@ -353,7 +351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 616600994125782315, guid: d1a27c8eaa71f2342ad6e1cfb4b201db, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.74
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 616600994125782315, guid: d1a27c8eaa71f2342ad6e1cfb4b201db, type: 3}
       propertyPath: m_LocalPosition.z

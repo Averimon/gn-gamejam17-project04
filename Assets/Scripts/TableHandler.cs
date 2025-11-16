@@ -49,12 +49,19 @@ public class TableHandler : MonoBehaviour
     {
         if (table is null) return;
         table.FreeTableUnit();
-        
+
         print("Table freed!");
         if (_waitingCustomers.Count > 0)
         {
             Customer customer = _waitingCustomers.Dequeue();
-            customer.AcquireTable(table);
+            if (customer != null)
+            {
+                customer.AcquireTable(table);
+            }
+            else
+            {
+                _freeTables.Enqueue(table);
+            }
         }
         else
         {

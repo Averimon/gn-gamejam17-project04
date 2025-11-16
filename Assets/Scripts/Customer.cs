@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Customer : MonoBehaviour
 {
@@ -18,13 +19,14 @@ public class Customer : MonoBehaviour
     [SerializeField] private float speed = 5f;
     [SerializeField] private float baseMaxWaitTime = 1f;
     [SerializeField] private Vector3 spawnPosition;
+    [SerializeField] private Vector3 direction;
     [SerializeField] private List<Consumable> menu = new List<Consumable>();
-    
+
     [Header("Debug")]
     [SerializeField] private CustomerStates states = CustomerStates.Waiting;
     [SerializeField] private Consumable craving;
     [SerializeField] private Vector3 desiredPosition;
-    [SerializeField] private Vector3 direction;
+
     [SerializeField] private UnityEngine.AI.NavMeshAgent agent;
 
     private GameObject _order;
@@ -39,7 +41,7 @@ public class Customer : MonoBehaviour
     private Animator _animator;
 
     // -------------------------------------------- Event Functions --------------------------------------------
-    
+
     void Awake()
     {
         _mainSpriteRenderer = GetComponent<SpriteRenderer>();
@@ -68,21 +70,23 @@ public class Customer : MonoBehaviour
         if (menu.Count == 0)
         {
             Debug.LogError("Please add at least one Consumable to the customers menu!");
+            gameObject.SetActive(false); // Disable customer if no menu
             return;
         }
         craving = menu[UnityEngine.Random.Range(0, menu.Count)];
-        craving.gameObject.SetActive(true);
-        
         spawnPosition = transform.position;
         AcquireTable(TableHandler.Instance.GetFreeTable(this));
         agent.SetDestination(desiredPosition);
+        ChangeState(CustomerStates.Walking);
         ApplyPatienceMultiplier(); // Apply initial multiplier
     }
 
     private void Update()
     {
+        if(this.gameObject == null) return;
         _timeWaited += Time.deltaTime;
-        
+
+
         if (_mainSpriteRenderer != null && _highlightSpriteRenderer != null)
         {
             if (_mainSpriteRenderer.sprite != _lastSprite)
@@ -92,18 +96,19 @@ public class Customer : MonoBehaviour
             }
         }
 
-        if (agent.remainingDistance <= 0.1f)
+        if (agent.remainingDistance <= 0.1f && !agent.isStopped)
         {
             agent.isStopped = true;
-            if (spawnPosition != desiredPosition)
+            if (spawnPosition != desiredPosition && _table != null)
             {
-                //REFACTO: ChangeState(CustomerStates.Ordering);
-            }
-
-            else
+                ChangeState(CustomerStates.Ordered);
+            }else
+            {
+                // Reached spawn position, destroy customer
                 Destroy(gameObject);
+            }
         }
-        
+
         switch (states)
         {
             case CustomerStates.Waiting:
@@ -137,14 +142,7 @@ public class Customer : MonoBehaviour
         _happy = received.type == craving.type;
 
         ChangeState(CustomerStates.Eating);
-        print("todo: Wait a few seconds?");
-
-        TableHandler.Instance.FreeTable(_table);
-        desiredPosition = spawnPosition;
-        direction = (desiredPosition - transform.position).normalized;
-        ChangeState(CustomerStates.Walking);
-        agent.isStopped = false;
-        agent.SetDestination(desiredPosition);
+        // Eating state will handle the wait and then transition to Walking
     }
 
     public void SetTexture(Sprite texture)
@@ -153,8 +151,8 @@ public class Customer : MonoBehaviour
         {
             _mainSpriteRenderer.sprite = texture;
         }
-        
-        _mainSpriteRenderer.color = Color.gray7;
+
+        _mainSpriteRenderer.color = Color.grey;
     }
 
     public void AcquireTable(TableUnit table)
@@ -165,7 +163,7 @@ public class Customer : MonoBehaviour
             ChangeState(CustomerStates.Waiting);
             return;
         }
-        
+
         ChangeDestination(_table.GetSeat(this));
         ChangeState(CustomerStates.Walking);
     }
@@ -178,16 +176,21 @@ public class Customer : MonoBehaviour
     // -------------------------------------------- Helper Functions --------------------------------------------
     private void OrderItem()
     {
-        _order.SetActive(true);
         StartCoroutine(LosingPatience(craving));
-        print("todo: Add a timer to simulate ordering time");
+        _order.SetActive(true);
+        StartCoroutine(OrderingTimer());
+    }
+
+    private IEnumerator OrderingTimer()
+    {
+        yield return new WaitForSeconds(1f); // Wait 1 second for ordering
+
         if (Vector3.Distance(WaitressMovement.Instance.transform.position, _table.gameObject.transform.position) <= 1f &&
-            WaitressMovement.Instance.agent.remainingDistance < 0.1f)
+            WaitressMovement.Instance.agent.remainingDistance < 0.1f &&
+            WaitressMovement.Instance.itemInHand != null)
         {
-            print("todo: verify if order that player brought is correct");
-            Transform Order = transform.GetChild(0);
-            Order.gameObject.SetActive(false);
             ReceiveItem(WaitressMovement.Instance.itemInHand);
+            _order.gameObject.SetActive(false);
         }
         _timeWaited = 0f;
     }
@@ -203,8 +206,8 @@ public class Customer : MonoBehaviour
             WaitressMovement.Instance.agent.remainingDistance < 0.1f)
         {
             ChangeState(CustomerStates.Ordered);
-            Transform Order = transform.GetChild(0);
-            Order.gameObject.SetActive(true);
+            _order.gameObject.SetActive(true);
+            
         }
     }
 
@@ -215,19 +218,19 @@ public class Customer : MonoBehaviour
             if (_happy) _mainSpriteRenderer.color = Color.white;
             TableHandler.Instance.FreeTable(_table);
             _table = null;
-            
-            ChangeDestination(spawnPosition);
+
+            desiredPosition = spawnPosition;
+            agent.isStopped = false;
+            agent.SetDestination(spawnPosition);
             ChangeState(CustomerStates.Walking);
         }
     }
-    
+
     private void Move()
     {
         _order.SetActive(false);
-        transform.position += direction * (speed * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, desiredPosition) > 0.1f) return;
-        if (_served) Destroy(gameObject);
         if (_table is not null) ChangeState(CustomerStates.Ordered);
         else ChangeState(CustomerStates.Waiting);
     }
@@ -272,7 +275,7 @@ public class Customer : MonoBehaviour
         direction = (desiredPosition - transform.position).normalized;
         _mainSpriteRenderer.flipX = direction.x < 0;
     }
-    
+
     private IEnumerator LosingPatience(Consumable consumable)
     {
         consumable.transform.localPosition = Vector3.zero;

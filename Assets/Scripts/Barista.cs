@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -30,9 +31,16 @@ public class Barista : MonoBehaviour, IPointerClickHandler
         SetPreparationCanvasActive(false);
     }
 
-    public void OnPointerClick (PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (_isPreparing) return;
+
+        if (eventData.pointerEnter != null &&
+            eventData.pointerEnter.transform.IsChildOf(orderCanvas.transform))
+        {
+            return;
+        }
+
         Debug.Log("Barista clicked");
         ToggleOrderCanvas();
     }
@@ -71,7 +79,8 @@ public class Barista : MonoBehaviour, IPointerClickHandler
         _isPreparing = true;
 
         consumable.transform.SetParent(preparationCanvas.transform, false);
-        consumable.transform.localPosition = Vector3.zero;
+        consumable.transform.localPosition = new Vector3(0f, -1.5f, 0f);
+        consumable.transform.localScale = new Vector3(2f, 2f, 1.0f);
 
         var mask = consumable.transform.Find("Mask").GetComponent<SpriteMask>();
 
@@ -80,19 +89,23 @@ public class Barista : MonoBehaviour, IPointerClickHandler
 
         SetPreparationCanvasActive(true);
 
-        mask.transform.localPosition = consumable.maskStartPos;
+        Vector3 endPos = mask.transform.localPosition;
+        float maskScaleOffset = mask.transform.localScale.y;
+        Vector3 startPos = new Vector3(endPos.x, endPos.y - maskScaleOffset, endPos.z);
+
+        mask.transform.localPosition = startPos;
 
         while (elapsedTime < prepTime)
         {
             elapsedTime += Time.deltaTime;
 
             float t = Mathf.Clamp01(elapsedTime / prepTime);
-            mask.transform.localPosition = Vector3.Lerp(consumable.maskStartPos, consumable.maskEndPos, t);
+            mask.transform.localPosition = Vector3.Lerp(startPos, endPos, t);
 
             yield return null;
         }
 
-        mask.transform.localPosition = consumable.maskEndPos;
+        mask.transform.localPosition = endPos;
         SetPreparationCanvasActive(false);
         _isPreparing = false;
         ServeConsumable(consumable);

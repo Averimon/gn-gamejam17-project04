@@ -9,11 +9,22 @@ public class Consumable : MonoBehaviour, IPointerClickHandler
 
     [SerializeField] private string consumableName;
     
-    public Vector3 maskStartPos;
-    public Vector3 maskEndPos;
+    /*private Vector3 _maskStartPos;
+    public Vector3 MaskStartPos => _maskStartPos;
+    private Vector3 _maskEndPos;
+    public Vector3 MaskEndPos => _maskEndPos;*/
     public bool isPreview = true;
 
     private bool isWaiting = false;
+
+/*
+    void Start()
+    {
+        var mask = GetComponentInChildren<SpriteMask>();
+        _maskEndPos = mask.transform.localPosition;
+        float maskScaleOffset = mask.transform.localScale.y;
+        _maskStartPos = new Vector3(_maskEndPos.x, _maskEndPos.y - maskScaleOffset, _maskEndPos.z);
+    }*/
 
     public void OnPointerClick(PointerEventData eventData)
     {

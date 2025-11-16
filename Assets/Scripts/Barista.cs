@@ -9,6 +9,8 @@ public class Barista : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Canvas orderCanvas;
     [SerializeField] private Canvas preparationCanvas;
     [SerializeField] private Transform readyConsumableSpawnPoint;
+    
+    public BaristaMenuHandler menuHandler;
 
     private bool _isPreparing = false;
     private bool _readyConsumableSpawnPointOccupied = false;
@@ -27,6 +29,7 @@ public class Barista : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
+        menuHandler = GetComponent<BaristaMenuHandler>();
         SetOrderCanvasActive(false);
         SetPreparationCanvasActive(false);
     }

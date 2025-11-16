@@ -11,6 +11,11 @@ public class BaristaMenuHandler : MonoBehaviour
 
     private int currentStartIndex = 0;
 
+    public List<GameObject> GetAvailableConsumables()
+    {
+        return availableConsumables;
+    }
+
     private void Start()
     {
         RefreshMenu();

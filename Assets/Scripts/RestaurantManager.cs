@@ -17,7 +17,6 @@ public class RestaurantManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
             if (onRestaurantStateChanged == null)
                 onRestaurantStateChanged = new UnityEvent<bool>();
         }

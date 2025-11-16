@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -30,9 +31,16 @@ public class Barista : MonoBehaviour, IPointerClickHandler
         SetPreparationCanvasActive(false);
     }
 
-    public void OnPointerClick (PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (_isPreparing) return;
+
+        if (eventData.pointerEnter != null &&
+            eventData.pointerEnter.transform.IsChildOf(orderCanvas.transform))
+        {
+            return;
+        }
+
         Debug.Log("Barista clicked");
         ToggleOrderCanvas();
     }
@@ -72,6 +80,7 @@ public class Barista : MonoBehaviour, IPointerClickHandler
 
         consumable.transform.SetParent(preparationCanvas.transform, false);
         consumable.transform.localPosition = new Vector3(0f, -1.5f, 0f);
+        consumable.transform.localScale = new Vector3(2f, 2f, 1.0f);
 
         var mask = consumable.transform.Find("Mask").GetComponent<SpriteMask>();
 

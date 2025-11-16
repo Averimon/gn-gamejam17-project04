@@ -27,6 +27,7 @@ public class HighscoreManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
 
             LoadHighscore();
             UpdateUI();

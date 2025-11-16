@@ -13,7 +13,6 @@ public class WaitressInteraction : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {

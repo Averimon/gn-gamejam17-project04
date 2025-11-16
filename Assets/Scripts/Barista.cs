@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -27,6 +26,9 @@ public class Barista : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
+        HighscoreManager.Instance.FindUIElements();
+        HighscoreManager.Instance.ResetScore();
+
         SetOrderCanvasActive(false);
         SetPreparationCanvasActive(false);
     }

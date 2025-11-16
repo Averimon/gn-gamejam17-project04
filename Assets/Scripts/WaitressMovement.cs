@@ -20,7 +20,6 @@ public class WaitressMovement : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
 
             agent.updateRotation = false;
             agent.updateUpAxis = false;

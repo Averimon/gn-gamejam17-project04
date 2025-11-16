@@ -71,7 +71,7 @@ public class Barista : MonoBehaviour, IPointerClickHandler
         _isPreparing = true;
 
         consumable.transform.SetParent(preparationCanvas.transform, false);
-        consumable.transform.localPosition = Vector3.zero;
+        consumable.transform.localPosition = new Vector3(0f, -1.5f, 0f);
 
         var mask = consumable.transform.Find("Mask").GetComponent<SpriteMask>();
 

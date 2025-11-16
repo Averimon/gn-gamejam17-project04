@@ -200,8 +200,6 @@ MonoBehaviour:
   type: 0
   difficulty: {fileID: 11400000, guid: f3ae3b5001eabe2488ac54a1960d9cc4, type: 2}
   consumableName: Blue
-  maskStartPos: {x: 0, y: -1.6, z: 0}
-  maskEndPos: {x: 0, y: 1, z: 0}
   isPreview: 1
 --- !u!61 &219062914402406910
 BoxCollider2D:
@@ -275,7 +273,7 @@ Transform:
   m_GameObject: {fileID: 4169052912361614181}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

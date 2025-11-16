@@ -264,4 +264,16 @@ public class Customer : MonoBehaviour
 
         mask.transform.localPosition = endPos;
     }
+
+    private void OnDestroy()
+    {
+        if (_happy)
+        {
+            HighscoreManager.Instance.AddScore(10);
+        }
+        else
+        {
+            HighscoreManager.Instance.AddScore(-5);
+        }
+    }
 }

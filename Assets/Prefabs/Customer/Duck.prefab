@@ -440,12 +440,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Customer
   speed: 5
-  baseMaxWaitTime: 5
+  baseMaxWaitTime: 30
   spawnPosition: {x: 0, y: 0, z: 0}
   direction: {x: 0, y: 0, z: 0}
-  menu:
-  - {fileID: 6567548905577359762}
-  - {fileID: 8679412078191940724}
   states: 0
   craving: {fileID: 0}
   desiredPosition: {x: 0, y: 0, z: 0}
@@ -686,17 +683,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7efa7c4639ea97647878e910aec45d81, type: 3}
---- !u!114 &6567548905577359762 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -4117017873326916894, guid: 7efa7c4639ea97647878e910aec45d81, type: 3}
-  m_PrefabInstance: {fileID: 2160026741217399664}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 918f10c2970a620409944507bbdb178f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Consumable
 --- !u!4 &8316333044124465419 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7966999922588920443, guid: 7efa7c4639ea97647878e910aec45d81, type: 3}
@@ -800,14 +786,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7966999922588920443, guid: 5edbfdac7b95fdc49bff7606f12f4417, type: 3}
   m_PrefabInstance: {fileID: 4516579646371245718}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8679412078191940724 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -4117017873326916894, guid: 5edbfdac7b95fdc49bff7606f12f4417, type: 3}
-  m_PrefabInstance: {fileID: 4516579646371245718}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 918f10c2970a620409944507bbdb178f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Consumable

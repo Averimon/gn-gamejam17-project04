@@ -440,12 +440,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Customer
   speed: 5
-  baseMaxWaitTime: 10
+  baseMaxWaitTime: 40
   spawnPosition: {x: 0, y: 0, z: 0}
   direction: {x: 0, y: 0, z: 0}
-  menu:
-  - {fileID: 933598997343730781}
-  - {fileID: 9217817233911205537}
   states: 0
   craving: {fileID: 0}
   desiredPosition: {x: 0, y: 0, z: 0}
@@ -667,17 +664,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7966999922588920443, guid: 5edbfdac7b95fdc49bff7606f12f4417, type: 3}
   m_PrefabInstance: {fileID: 4121121181332567107}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9217817233911205537 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -4117017873326916894, guid: 5edbfdac7b95fdc49bff7606f12f4417, type: 3}
-  m_PrefabInstance: {fileID: 4121121181332567107}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 918f10c2970a620409944507bbdb178f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Consumable
 --- !u!1001 &5343984238435714751
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -795,17 +781,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7efa7c4639ea97647878e910aec45d81, type: 3}
---- !u!114 &933598997343730781 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -4117017873326916894, guid: 7efa7c4639ea97647878e910aec45d81, type: 3}
-  m_PrefabInstance: {fileID: 5343984238435714751}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 918f10c2970a620409944507bbdb178f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Consumable
 --- !u!4 &2646389721080884420 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7966999922588920443, guid: 7efa7c4639ea97647878e910aec45d81, type: 3}

@@ -36,6 +36,7 @@ public class CustomerSpawner : MonoBehaviour
         {
             Debug.LogError("CustomerSpawner: 'customerPrefabs' is empty. Please assign finished customer prefabs in the inspector.");
         }
+        SpawnCustomer();
     }
 
     private void Update()

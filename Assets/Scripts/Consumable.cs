@@ -13,6 +13,7 @@ public class Consumable : MonoBehaviour, IPointerClickHandler
     public Vector3 MaskStartPos => _maskStartPos;
     private Vector3 _maskEndPos;
     public Vector3 MaskEndPos => _maskEndPos;*/
+    
     public bool isPreview = true;
 
     private bool isWaiting = false;
